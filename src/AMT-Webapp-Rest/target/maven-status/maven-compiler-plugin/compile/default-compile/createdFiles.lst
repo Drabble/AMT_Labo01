@@ -1,0 +1,10 @@
+com\heig\amt\webapp\web\LogoutServlet.class
+com\heig\amt\webapp\web\IndexServlet.class
+com\heig\amt\webapp\web\LoginServlet.class
+com\heig\amt\webapp\web\PrivateServlet.class
+com\heig\amt\webapp\services\UserManager.class
+com\heig\amt\webapp\web\MainFilter$RequestWrapper.class
+com\heig\amt\webapp\web\MainFilter$ResponseWrapper.class
+com\heig\amt\webapp\web\MainFilter.class
+com\heig\amt\webapp\model\User.class
+com\heig\amt\webapp\web\RegisterServlet.class
