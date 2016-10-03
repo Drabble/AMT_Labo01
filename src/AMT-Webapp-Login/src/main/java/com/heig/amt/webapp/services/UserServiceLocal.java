@@ -6,6 +6,7 @@
 package com.heig.amt.webapp.services;
 
 import com.heig.amt.webapp.model.User;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -18,4 +19,5 @@ public interface UserServiceLocal {
     public long register(String username, String password);
     public long login(String username, String password);
     public User get(long id);
+    public List<User> findAll();
 }

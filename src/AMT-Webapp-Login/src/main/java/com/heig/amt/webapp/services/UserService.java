@@ -6,6 +6,7 @@
 package com.heig.amt.webapp.services;
 
 import com.heig.amt.webapp.model.User;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -17,12 +18,11 @@ import javax.ejb.Stateless;
 public class UserService implements UserServiceLocal {
 
     @EJB
-    UserStore userStore;
+    UserStoreLocal userStore;
     
     @Override
     public long register(String username, String password){
-        if(!password.isEmpty() && !username.isEmpty()){
-            
+        if(!username.isEmpty()){
             return userStore.saveUser(new User(username, password));
         }
         return -1;
@@ -37,4 +37,10 @@ public class UserService implements UserServiceLocal {
     public User get(long id){
         return userStore.loadUser(id);
     }
+    
+    public List<User> findAll(){
+        return userStore.findAllUsers();
+    }
+    
+    
 }
