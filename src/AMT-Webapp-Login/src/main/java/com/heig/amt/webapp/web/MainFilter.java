@@ -47,6 +47,7 @@ public class MainFilter implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -71,7 +72,7 @@ public class MainFilter implements Filter {
         
         // Only allow access to Index if not logged in
         if(httpRequest.getRequestURI().compareTo(httpRequest.getContextPath() + "/") == 0){
-            if(httpRequest.getSession().getAttribute("user") != null){
+            if(httpRequest.getSession().getAttribute("id") != null){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/Private");
             }
             else{
@@ -79,13 +80,13 @@ public class MainFilter implements Filter {
             }
         }
         else if(httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/Index")){
-            if(httpRequest.getSession().getAttribute("user") != null){
+            if(httpRequest.getSession().getAttribute("id") != null){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/Private");
             }
         }
         // Only allow access to Private if logged in
         else if(httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/Private")){
-            if(httpRequest.getSession().getAttribute("user") == null){
+            if(httpRequest.getSession().getAttribute("id") == null){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/Index");
             }
         }

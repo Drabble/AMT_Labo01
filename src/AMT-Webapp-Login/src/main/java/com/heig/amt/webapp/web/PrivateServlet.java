@@ -5,8 +5,9 @@
  */
 package com.heig.amt.webapp.web;
 
-import com.heig.amt.webapp.services.UserManager;
+import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PrivateServlet extends HttpServlet {
 
+    @EJB
+    private UserServiceLocal userService; 
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -29,7 +32,7 @@ public class PrivateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("user", UserManager.getInstance().getUser((String)request.getSession().getAttribute("user")));
+        request.setAttribute("user", userService.get((Long)request.getSession().getAttribute("id")));
         request.getRequestDispatcher("/WEB-INF/pages/private.jsp").forward(request, response);
     }
 }

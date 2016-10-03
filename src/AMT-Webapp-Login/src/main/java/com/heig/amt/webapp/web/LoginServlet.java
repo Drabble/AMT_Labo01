@@ -5,8 +5,9 @@
  */
 package com.heig.amt.webapp.web;
 
-import com.heig.amt.webapp.services.UserManager;
+import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginServlet extends HttpServlet {
 
+    @EJB
+    private UserServiceLocal userService; 
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -30,8 +33,9 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(UserManager.getInstance().loginUser(request.getParameter("username"), request.getParameter("password"))){
-            request.getSession().setAttribute("user", request.getParameter("username"));
+        long id = userService.login(request.getParameter("username"), request.getParameter("password"));
+        if(id != -1){
+            request.getSession().setAttribute("id", id);
             response.sendRedirect(request.getContextPath() + "/Private");
         } else{
             request.setAttribute("loginError", "Wrong username/password");
