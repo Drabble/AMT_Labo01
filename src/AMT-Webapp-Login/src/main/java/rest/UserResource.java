@@ -54,15 +54,15 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)	
-    public long addUser(String username, String password)	{	
-        return userService.register(username, password);	
+    public long addUser(User user)	{	
+        return userService.register(user.getUsername(), user.getPassword());	
     }
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")	
-    public void updateUser(@PathParam("userId") long userId, String username, String password) {	
-        userService.update(userId, new User(username, password));	
+    public void updateUser(@PathParam("userId") long userId, User user) {	
+        userService.update(userId, user);	
     }
     
     @DELETE
