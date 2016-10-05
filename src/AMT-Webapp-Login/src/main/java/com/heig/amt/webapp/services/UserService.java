@@ -41,6 +41,16 @@ public class UserService implements UserServiceLocal {
     public List<User> findAll(){
         return userStore.findAllUsers();
     }
+
+    @Override
+    public void delete(long id) {
+        userStore.deleteUser(id);
+    }
+
+    @Override
+    public void update(long id, User user) {
+        userStore.updateUser(id, user);
+    }
     
     
 }

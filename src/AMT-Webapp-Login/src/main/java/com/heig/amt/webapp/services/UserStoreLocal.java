@@ -17,6 +17,8 @@ import javax.ejb.Local;
 public interface UserStoreLocal {
     public long saveUser(User user);
     public User loadUser(long id);
+    public void deleteUser(long id);
+    public void updateUser(long id, User user);
     public long getUserId(User user);
     public List<User> findAllUsers();
 }

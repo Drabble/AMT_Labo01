@@ -19,5 +19,7 @@ public interface UserServiceLocal {
     public long register(String username, String password);
     public long login(String username, String password);
     public User get(long id);
+    public void delete(long id);
+    public void update(long id, User user);
     public List<User> findAll();
 }

@@ -11,8 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -24,7 +29,7 @@ import rest.dto.UserDTO;
  * @author antoi
  */
 @Stateless	
-@Path("/users")	
+@Path("/user")	
 public class UserResource {
     @EJB	
     UserServiceLocal userService;	
@@ -33,23 +38,41 @@ public class UserResource {
     UriInfo uriInfo;
 
     @GET	
-    @Produces(MediaType.APPLICATION_JSON)	
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/all")	
     public List<UserDTO> getUsers() {	
         List<User> users = userService.findAll();
-        return users.stream().map(u -> new UserDTO(u.getUsername())).collect(Collectors.toList());
+        return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
     }
 
-    /*@GET
-    @Produces("application/json")	
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)	
     @Path("/{userId}")	
-    public long getUser()	{	
-        return	beersManager.add(beer);	
+    public UserDTO getUser(@PathParam("userId") long userId)	{	
+        return userToDTO(userService.get(userId));
     }
 
     @POST
-    @Consumes("application/json")	
+    @Consumes(MediaType.APPLICATION_JSON)	
+    public long addUser(String username, String password)	{	
+        return userService.register(username, password);	
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")	
-    public long getUser()	{	
-        return	beersManager.add(beer);	
-    }*/
+    public void updateUser(@PathParam("userId") long userId, String username, String password) {	
+        userService.update(userId, new User(username, password));	
+    }
+    
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{userId}")	
+    public void deleteUser(@PathParam("userId") long userId) {	
+        userService.delete(userId);	
+    }
+    
+    private UserDTO userToDTO(User user){
+        return new UserDTO(user.getUsername());
+    }
 }

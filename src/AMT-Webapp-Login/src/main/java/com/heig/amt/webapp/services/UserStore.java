@@ -57,4 +57,14 @@ public class UserStore implements UserStoreLocal {
         return new ArrayList<>(users.values());
     }
     
+    
+    @Override
+    public void deleteUser(long id){
+        users.remove(id);
+    }
+    
+    @Override
+    public void updateUser(long id, User user){
+        users.put(id, user);
+    }
 }
