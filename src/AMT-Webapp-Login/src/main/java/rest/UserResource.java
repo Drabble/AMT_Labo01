@@ -72,7 +72,7 @@ public class UserResource {
         userService.delete(userId);	
     }
     
-    private UserDTO userToDTO(User user){
+    private UserDTO  userToDTO(User user){
         return new UserDTO(user.getUsername());
     }
 }
