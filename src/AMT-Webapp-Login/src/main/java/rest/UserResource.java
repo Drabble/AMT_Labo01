@@ -21,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import rest.dto.UserDTO;
 
@@ -29,7 +30,7 @@ import rest.dto.UserDTO;
  * @author antoi
  */
 @Stateless	
-@Path("/user")	
+@Path("/users")	
 public class UserResource {
     @EJB	
     UserServiceLocal userService;	
@@ -38,8 +39,7 @@ public class UserResource {
     UriInfo uriInfo;
 
     @GET	
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/all")	
+    @Produces(MediaType.APPLICATION_JSON)	
     public List<UserDTO> getUsers() {	
         List<User> users = userService.findAll();
         return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
@@ -51,11 +51,12 @@ public class UserResource {
     public UserDTO getUser(@PathParam("userId") long userId)	{	
         return userToDTO(userService.get(userId));
     }
-
+    
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)	
-    public long addUser(User user)	{	
-        return userService.register(user.getUsername(), user.getPassword());	
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUser(User user)	{	
+        userService.register(user.getUsername(), user.getPassword());
+        return Response.status(Response.Status.CREATED).build();
     }
     
     @PUT
