@@ -55,8 +55,12 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(User user)	{	
-        userService.register(user.getUsername(), user.getPassword());
-        return Response.status(Response.Status.CREATED).build();
+        if(userService.register(user.getUsername(), user.getPassword()) == -1){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+        else{
+            return Response.status(Response.Status.CREATED).build();
+        }
     }
     
     @PUT
