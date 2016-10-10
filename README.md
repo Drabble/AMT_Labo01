@@ -1,9 +1,8 @@
-# AMT-Phase_2-Drabble-Serneels
+# AMT-Phase_3-Drabble-Serneels
 
 ## Introduction
 
-This repo contains a simple java EE app with login/register and permissions.
-
+This repo contains a MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses EJB for the services. The database is stored inside a singleton EJB.
 
 ## Quick start
 
