@@ -59,12 +59,20 @@ public class UserStore implements UserStoreLocal {
     
     
     @Override
-    public void deleteUser(long id){
-        users.remove(id);
+    public boolean deleteUser(long id){
+        if(users.containsKey(id)){
+            users.remove(id);
+            return true;
+        }
+        return false;
     }
     
     @Override
-    public void updateUser(long id, User user){
-        users.put(id, user);
+    public boolean updateUser(long id, User user){
+        if(users.containsKey(id)){
+            users.put(id, user);
+            return true;
+        }
+        return false;
     }
 }

@@ -38,18 +38,19 @@ public class UserService implements UserServiceLocal {
         return userStore.loadUser(id);
     }
     
+    @Override
     public List<User> findAll(){
         return userStore.findAllUsers();
     }
 
     @Override
-    public void delete(long id) {
-        userStore.deleteUser(id);
+    public boolean delete(long id) {
+        return userStore.deleteUser(id);
     }
 
     @Override
-    public void update(long id, User user) {
-        userStore.updateUser(id, user);
+    public boolean update(long id, User user) {
+        return userStore.updateUser(id, user);
     }
     
     

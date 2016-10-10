@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import rest.dto.UserDTO;
+import rest.dto.UserLoginDTO;
 
 /**
  *
@@ -54,7 +55,7 @@ public class UserResource {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(User user)	{	
+    public Response addUser(UserLoginDTO user)	{	
         if(userService.register(user.getUsername(), user.getPassword()) == -1){
             return Response.status(Response.Status.CONFLICT).build();
         }
@@ -66,18 +67,32 @@ public class UserResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")	
-    public void updateUser(@PathParam("userId") long userId, User user) {	
-        userService.update(userId, user);	
+    public Response updateUser(@PathParam("userId") long userId, UserLoginDTO user) {	
+        if(userService.update(userId, UserLoginDTOToUser(user))){
+            return Response.status(Response.Status.OK).build();
+        }	
+        else{
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
     
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")	
-    public void deleteUser(@PathParam("userId") long userId) {	
-        userService.delete(userId);	
+    public Response deleteUser(@PathParam("userId") long userId) {	
+        if(userService.delete(userId)){
+            return Response.status(Response.Status.OK).build();
+        }	
+        else{
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
     
     private UserDTO  userToDTO(User user){
         return new UserDTO(user.getUsername());
+    }
+    
+    private User UserLoginDTOToUser(UserLoginDTO userLoginDTO){
+        return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword());
     }
 }
