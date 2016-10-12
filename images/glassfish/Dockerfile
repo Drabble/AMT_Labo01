@@ -12,7 +12,7 @@ COPY apps/AMT-Webapp-Login-1.0-SNAPSHOT.war /glassfish4/glassfish/domains/domain
 
 RUN echo "AS_ADMIN_PASSWORD=glassfish" > /tmp/gfpw.txt && \
 	./glassfish4/bin/asadmin start-domain domain1 && \
-	./glassfish4/bin/asadmin --interactive=false --user admin --passwordfile=/tmp/gfpw.txt create-jdbc-connection-pool --restype javax.sql.DataSource --datasourceclassname com.mysql.jdbc.jdbc2.optional.MysqlDataSource --property user=root:password=adminpw:DatabaseName=sakila:ServerName=db:port=3306 pool_sakila && \
-	./glassfish4/bin/asadmin --interactive=false --user admin --passwordfile=/tmp/gfpw.txt create-jdbc-resource --connectionpoolid pool_sakila jdbc/sakila
+	./glassfish4/bin/asadmin --interactive=false --user admin --passwordfile=/tmp/gfpw.txt create-jdbc-connection-pool --restype javax.sql.DataSource --datasourceclassname com.mysql.jdbc.jdbc2.optional.MysqlDataSource --property user=root:password=adminpw:DatabaseName=webapp_login:ServerName=db:port=3306 pool_webapp_login && \
+	./glassfish4/bin/asadmin --interactive=false --user admin --passwordfile=/tmp/gfpw.txt create-jdbc-resource --connectionpoolid pool_webapp_login jdbc/webapp_login
 
 RUN ./glassfish4/bin/asadmin stop-domain domain1 

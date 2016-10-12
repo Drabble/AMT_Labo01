@@ -6,9 +6,17 @@
 package com.heig.amt.webapp.services;
 
 import com.heig.amt.webapp.model.User;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.sql.DataSource;
 
 /**
  *
@@ -17,40 +25,51 @@ import javax.ejb.Stateless;
 @Stateless
 public class UserService implements UserServiceLocal {
 
-    @EJB
-    UserStoreLocal userStore;
+    @Resource(lookup="jdbc/webapp_login")
+    private DataSource dataSource;
     
     @Override
     public long register(String username, String password){
-        if(!username.isEmpty()){
-            return userStore.saveUser(new User(username, password));
-        }
+
         return -1;
     }
     
     @Override
     public long login(String username, String password){
-        return userStore.getUserId(new User(username, password));
+        return 1;
     }
 
     @Override
     public User get(long id){
-        return userStore.loadUser(id);
+        return new User("","");
     }
     
     @Override
     public List<User> findAll(){
-        return userStore.findAllUsers();
+        List<User> users = new ArrayList<>();
+        try{
+            Connection connection = dataSource.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM users");
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                users.add(new User(rs.getString("username"), rs.getString("password")));
+            }
+            connection.close();
+        }
+        catch(SQLException e){
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return users;
     }
 
     @Override
     public boolean delete(long id) {
-        return userStore.deleteUser(id);
+        return false;
     }
 
     @Override
     public boolean update(long id, User user) {
-        return userStore.updateUser(id, user);
+        return false;
     }
     
     
