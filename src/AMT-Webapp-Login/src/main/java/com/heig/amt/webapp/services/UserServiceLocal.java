@@ -15,11 +15,16 @@ import javax.ejb.Local;
  */
 @Local
 public interface UserServiceLocal {
-    
-    public long register(String username, String password);
+
+    public long create(String username, String password);
+
     public long login(String username, String password);
+
     public User get(long id);
+
     public boolean delete(long id);
+
     public boolean update(long id, User user);
+
     public List<User> findAll();
 }

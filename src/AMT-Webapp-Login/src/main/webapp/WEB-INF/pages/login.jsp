@@ -88,70 +88,31 @@
             <div class="intro-body">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-2">
-                            <h1 class="brand-heading">AMT Webapp</h1>
-                            <p class="intro-text">A simple login webapp.
-                                <br>Created by Antoine Drabble & Guillaume Serneels.</p>
-                            <a href="#about" class="btn btn-circle page-scroll">
-                                <i class="fa fa-angle-double-down animated"></i>
-                            </a>
+                        <div class="col-md-4 col-md-offset-4">
+                            <h1 class="brand-heading col-md-6">Login</h1>
+                            <c:choose>
+                                <c:when test="${not empty requestScope.error}">
+                                    <div class="alert alert-danger">
+                                        <strong>Error with the login!</strong> ${requestScope.error}
+                                    </div>
+                                </c:when>    
+                            </c:choose>
+                            <form id="login-form" action="${pageContext.request.contextPath}/Login" method="post" role="form" style="display: block;">
+                                <div class="form-group col-md-12">
+                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="form-group col-md-6">     
+                                    <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-
-        <!-- About Section -->
-        <section id="about" class="container content-section text-center">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>About AMT Webapp</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="http://startbootstrap.com/template-overviews/grayscale/">Maecenas</a> vitae est ultrices, semper eros non, aliquam odio. Aenean vel venenatis lacus, quis facilisis ante. Maecenas faucibus semper nibh, eu venenatis elit tempus aliquam. Vestibulum quis velit vitae velit mattis vestibulum. In dictum nisi aliquet, ultricies turpis ac, pellentesque elit. Curabitur dapibus nisl id ligula auctor efficitur. Donec tempus a ipsum eu fermentum. Quisque pharetra sed felis quis tristique. Nullam id malesuada sem. Integer nec placerat neque, at dictum mauris. Donec pretium consectetur augue in vulputate. Maecenas sed aliquet ipsum, facilisis tempus odio.</p>
-                    <p>Nunc condimentum euismod quam at dictum. Phasellus a ex eget sem dignissim sodales. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis scelerisque augue eget luctus <a href="http://snazzymaps.com/">varius</a>.</p>
-                    <p>Donec ipsum eros, ornare efficitur finibus vel, semper eu mi. Nulla finibus odio at pharetra pharetra. In non mi scelerisque erat feugiat congue sed eget orci. Donec tristique arcu augue, vitae rutrum libero eleifend vitae.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Download Section -->
-        <section id="download" class="content-section text-center">
-            <div class="download-section">
-                <div class="container">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <h2>Download AMT for mobile</h2>
-                        <p>You can download AMT for mobile for free on the preview page at AMT mobile.</p>
-                        <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="container content-section text-center">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Contact AMT webapp</h2>
-                    <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                    <p><a href="mailto:feedback@startbootstrap.com">feedback@amtwebapp.com</a>
-                    </p>
-                    <ul class="list-inline banner-social-buttons">
-                        <li>
-                            <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                        </li>
-                        <li>
-                            <a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Map Section -->
-        <div id="map"></div>
-
         <!-- Footer -->
         <footer>
             <div class="container text-center">
@@ -167,9 +128,6 @@
 
         <!-- Plugin JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-
-        <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeHGYLWNIaoSAJ2qtb4sfqoBV9eUNPXiY&sensor=false"></script>
 
         <!-- Theme JavaScript -->
         <script src="${pageContext.request.contextPath}/resources/js/grayscale.min.js"></script>

@@ -19,8 +19,25 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RegisterServlet extends HttpServlet {
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("id", request.getSession().getAttribute("id"));
+        request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+    }
+
     @EJB
-    private UserServiceLocal userService; 
+    private UserServiceLocal userService;
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -32,12 +49,12 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        long id = userService.register(request.getParameter("username"), request.getParameter("password"));
-        if(id != -1){
+        long id = userService.create(request.getParameter("username"), request.getParameter("password"));
+        if (id != -1) {
             request.getSession().setAttribute("id", id);
-            response.sendRedirect(request.getContextPath() + "/Private");
-        } else{
-            request.setAttribute("registerError", "Username already exists");
+            response.sendRedirect(request.getContextPath() + "/Users");
+        } else {
+            request.setAttribute("error", "Username already exists");
             request.getRequestDispatcher("/WEB-INF/pages/index.jsp").forward(request, response);
         }
     }

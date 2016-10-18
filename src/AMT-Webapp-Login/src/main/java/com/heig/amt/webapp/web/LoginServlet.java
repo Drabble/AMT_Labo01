@@ -20,7 +20,23 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
     @EJB
-    private UserServiceLocal userService; 
+    private UserServiceLocal userService;
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("id", request.getSession().getAttribute("id"));
+        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -34,11 +50,11 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         long id = userService.login(request.getParameter("username"), request.getParameter("password"));
-        if(id != -1){
+        if (id != -1) {
             request.getSession().setAttribute("id", id);
-            response.sendRedirect(request.getContextPath() + "/Private");
-        } else{
-            request.setAttribute("loginError", "Wrong username/password");
+            response.sendRedirect(request.getContextPath() + "/Users");
+        } else {
+            request.setAttribute("error", "Wrong username/password");
             request.getRequestDispatcher("/WEB-INF/pages/index.jsp").forward(request, response);
         }
     }

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author antoi
  */
 public class IndexServlet extends HttpServlet {
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -29,7 +29,7 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("id", request.getSession().getAttribute("id"));
         request.getRequestDispatcher("/WEB-INF/pages/index.jsp").forward(request, response);
     }
 }
-    

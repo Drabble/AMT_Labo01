@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author antoi
  */
-public class PrivateServlet extends HttpServlet {
+public class UsersServlet extends HttpServlet {
 
     @EJB
-    private UserServiceLocal userService; 
+    private UserServiceLocal userService;
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -32,7 +33,8 @@ public class PrivateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("user", userService.get((Long)request.getSession().getAttribute("id")));
-        request.getRequestDispatcher("/WEB-INF/pages/private.jsp").forward(request, response);
+        request.setAttribute("username", userService.get((Long) request.getSession().getAttribute("id")).getUsername());
+        request.setAttribute("id", request.getSession().getAttribute("id"));
+        request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request, response);
     }
 }

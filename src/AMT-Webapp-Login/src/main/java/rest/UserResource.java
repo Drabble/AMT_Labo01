@@ -30,69 +30,67 @@ import rest.dto.UserLoginDTO;
  *
  * @author antoi
  */
-@Stateless	
-@Path("/users")	
+@Stateless
+@Path("/users")
 public class UserResource {
-    @EJB	
-    UserServiceLocal userService;	
+
+    @EJB
+    UserServiceLocal userService;
 
     @Context
     UriInfo uriInfo;
 
-    @GET	
-    @Produces(MediaType.APPLICATION_JSON)	
-    public List<UserDTO> getUsers() {	
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<UserDTO> getUsers() {
         List<User> users = userService.findAll();
         return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)	
-    @Path("/{userId}")	
-    public UserDTO getUser(@PathParam("userId") long userId)	{	
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{userId}")
+    public UserDTO getUser(@PathParam("userId") long userId) {
         return userToDTO(userService.get(userId));
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(UserLoginDTO user)	{	
-        if(userService.register(user.getUsername(), user.getPassword()) == -1){
+    public Response addUser(UserLoginDTO user) {
+        if (userService.create(user.getUsername(), user.getPassword()) == -1) {
             return Response.status(Response.Status.CONFLICT).build();
-        }
-        else{
+        } else {
             return Response.status(Response.Status.CREATED).build();
         }
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{userId}")	
-    public Response updateUser(@PathParam("userId") long userId, UserLoginDTO user) {	
-        if(userService.update(userId, UserLoginDTOToUser(user))){
+    @Path("/{userId}")
+    public Response updateUser(@PathParam("userId") long userId, UserLoginDTO user) {
+        if (userService.update(userId, UserLoginDTOToUser(user))) {
             return Response.status(Response.Status.OK).build();
-        }	
-        else{
+        } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
-    
+
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{userId}")	
-    public Response deleteUser(@PathParam("userId") long userId) {	
-        if(userService.delete(userId)){
+    @Path("/{userId}")
+    public Response deleteUser(@PathParam("userId") long userId) {
+        if (userService.delete(userId)) {
             return Response.status(Response.Status.OK).build();
-        }	
-        else{
+        } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
-    
-    private UserDTO  userToDTO(User user){
+
+    private UserDTO userToDTO(User user) {
         return new UserDTO(user.getUsername());
     }
-    
-    private User UserLoginDTOToUser(UserLoginDTO userLoginDTO){
+
+    private User UserLoginDTOToUser(UserLoginDTO userLoginDTO) {
         return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword());
     }
 }

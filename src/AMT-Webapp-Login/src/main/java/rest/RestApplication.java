@@ -15,10 +15,10 @@ import javax.ws.rs.core.Application;
  * @author antoi
  */
 @ApplicationPath("/api")
-public class RestDemoApplication extends Application{
-    
+public class RestApplication extends Application {
+
     @Override
-    public Map<String, Object> getProperties(){
+    public Map<String, Object> getProperties() {
         Map<String, Object> properties = new HashMap<>();
         properties.put("jersey.config.disableMoxyJson", true);
         return properties;

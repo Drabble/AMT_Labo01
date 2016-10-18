@@ -10,13 +10,13 @@ package rest.dto;
  * @author antoi
  */
 public class UserLoginDTO {
+
     private String username;
     private String password;
 
     public UserLoginDTO() {
     }
-    
-   
+
     public UserLoginDTO(String username, String password) {
         this.username = username;
         this.password = password;
@@ -37,6 +37,5 @@ public class UserLoginDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
 }
