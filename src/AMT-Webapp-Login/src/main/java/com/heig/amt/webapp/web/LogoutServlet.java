@@ -30,6 +30,6 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getSession().setAttribute("id", null);
-        response.sendRedirect(request.getContextPath() + "/Index");
+        response.sendRedirect(request.getContextPath() + "/index");
     }
 }

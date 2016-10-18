@@ -66,16 +66,16 @@ public class AuthFillter implements Filter {
 
         // Only allow access to Index if not logged in
         if (httpRequest.getRequestURI().compareTo(httpRequest.getContextPath() + "/") == 0) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/Index");
-        } else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/Login")
-                || httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/Register")) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/index");
+        } else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/login")
+                || httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/register")) {
             if (httpRequest.getSession().getAttribute("id") != null) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/Users");
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/users");
             }
         } // Only allow access to Private if logged in
-        else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/Users")) {
+        else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/users")) {
             if (httpRequest.getSession().getAttribute("id") == null) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/Login");
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
             }
         }
     }

@@ -52,10 +52,10 @@ public class RegisterServlet extends HttpServlet {
         long id = userService.create(request.getParameter("username"), request.getParameter("password"));
         if (id != -1) {
             request.getSession().setAttribute("id", id);
-            response.sendRedirect(request.getContextPath() + "/Users");
+            response.sendRedirect(request.getContextPath() + "/users");
         } else {
             request.setAttribute("error", "Username already exists");
-            request.getRequestDispatcher("/WEB-INF/pages/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
         }
     }
 }

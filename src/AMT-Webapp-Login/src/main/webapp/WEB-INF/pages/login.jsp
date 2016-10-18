@@ -42,7 +42,7 @@
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                         Menu <i class="fa fa-bars"></i>
                     </button>
-                    <a class="navbar-brand" href="${pageContext.request.contextPath}/Index">
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/index">
                         <span class="light">AMT</span> HEIG
                     </a>
                 </div>
@@ -55,23 +55,23 @@
                             <a href="#page-top"></a>
                         </li>
                         <li>
-                            <a href="${pageContext.request.contextPath}/Index">Index</a>
+                            <a href="${pageContext.request.contextPath}/index">Index</a>
                         </li>
                         <c:choose>
                             <c:when test="${empty requestScope.id}">
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/Login">Login</a>
+                                    <a href="${pageContext.request.contextPath}/login">Login</a>
                                 </li>
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/Register">Register</a>
+                                    <a href="${pageContext.request.contextPath}/register">Register</a>
                                 </li>
                             </c:when>    
                             <c:otherwise>
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/Users">Users</a>
+                                    <a href="${pageContext.request.contextPath}/users">Users</a>
                                 </li>
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/Logout">Logout</a>
+                                    <a href="${pageContext.request.contextPath}/logout">Logout</a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -89,7 +89,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <h1 class="brand-heading col-md-6">Login</h1>
+                            <h1 class="brand-heading">Login</h1>
                             <c:choose>
                                 <c:when test="${not empty requestScope.error}">
                                     <div class="alert alert-danger">
@@ -97,7 +97,7 @@
                                     </div>
                                 </c:when>    
                             </c:choose>
-                            <form id="login-form" action="${pageContext.request.contextPath}/Login" method="post" role="form" style="display: block;">
+                            <form id="login-form" action="${pageContext.request.contextPath}/login" method="post" role="form" style="display: block;">
                                 <div class="form-group col-md-12">
                                     <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
