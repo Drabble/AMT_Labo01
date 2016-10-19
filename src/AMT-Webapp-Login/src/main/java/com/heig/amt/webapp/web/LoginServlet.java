@@ -8,6 +8,8 @@ package com.heig.amt.webapp.web;
 import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,17 +54,26 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try{
             long id = userService.login(request.getParameter("username"), request.getParameter("password"));
-            if (id != -1) {
-                request.getSession().setAttribute("id", id);
-                response.sendRedirect(request.getContextPath() + "/users");
-            } else {
-                request.setAttribute("error", "Wrong username/password");
-                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+            request.getSession().setAttribute("id", id);
+            response.sendRedirect(request.getContextPath() + "/users");
+        } catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            String message;
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                message = e.getCause().getMessage();
             }
-        } catch(SQLException e){
-            request.setAttribute("error", e.getSQLState());
-                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);;
+            // Otherwise send internal server error message
+            else {
+                message = "Internal server error!";
+            }
+
+            request.setAttribute("error", message);
+            request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);;
         }
+        
     }
 
 }

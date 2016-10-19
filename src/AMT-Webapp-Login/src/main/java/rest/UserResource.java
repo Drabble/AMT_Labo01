@@ -7,6 +7,7 @@ package rest;
 
 import com.heig.amt.webapp.model.User;
 import com.heig.amt.webapp.services.UserServiceLocal;
+import com.heig.amt.webapp.web.LoginServlet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.ServletException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -49,12 +51,10 @@ public class UserResource {
         try {
             List<User> users = userService.findAll();
             return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
-        } catch (SQLException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        }  catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            return null;
         }
-        return null;
     }
 
     @GET
@@ -63,12 +63,10 @@ public class UserResource {
     public UserDTO getUser(@PathParam("userId") long userId) {
         try {
             return userToDTO(userService.get(userId));
-        } catch (SQLException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            return null;
         }
-        return null;
     }
 
     @POST
@@ -80,12 +78,18 @@ public class UserResource {
             } else {
                 return Response.status(Response.Status.CREATED).build();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        }  catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+            // Otherwise send internal server error message
+            else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
         }
-        return Response.status(Response.Status.CONFLICT).build();
     }
 
     @PUT
@@ -98,12 +102,18 @@ public class UserResource {
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+            // Otherwise send internal server error message
+            else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
         }
-        return Response.status(Response.Status.OK).build();
     }
 
     @DELETE
@@ -116,12 +126,18 @@ public class UserResource {
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+            // Otherwise send internal server error message
+            else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
         }
-        return Response.status(Response.Status.OK).build();
     }
 
     private UserDTO userToDTO(User user) {

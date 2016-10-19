@@ -17,15 +17,15 @@ import javax.ejb.Local;
 @Local
 public interface UserServiceLocal {
 
-    public long create(String username, String password) throws SQLException, IllegalArgumentException;
+    public long create(String username, String password) throws SQLException, IllegalArgumentException, RuntimeException;
 
     public long login(String username, String password) throws SQLException, IllegalArgumentException;
 
-    public User get(long id) throws SQLException, IllegalArgumentException;
+    public User get(long id) throws SQLException;
 
-    public boolean delete(long id) throws SQLException, IllegalArgumentException;
+    public boolean delete(long id) throws SQLException;
 
-    public boolean update(long id, User user) throws SQLException, IllegalArgumentException;
+    public boolean update(long id, User user) throws SQLException;
 
-    public List<User> findAll() throws SQLException, IllegalArgumentException;
+    public List<User> findAll() throws SQLException;
 }

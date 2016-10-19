@@ -40,10 +40,21 @@ public class UsersServlet extends HttpServlet {
             request.setAttribute("username", userService.get((Long) request.getSession().getAttribute("id")).getUsername());
             request.setAttribute("id", request.getSession().getAttribute("id"));
             request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(UsersServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(UsersServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }  catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            String message;
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                message = e.getCause().getMessage();
+            }
+            // Otherwise send internal server error message
+            else {
+                message = "Internal server error!";
+            }
+
+            throw new ServletException(message);
         }
     }
 }

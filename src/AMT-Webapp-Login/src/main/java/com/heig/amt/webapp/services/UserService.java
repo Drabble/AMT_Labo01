@@ -31,52 +31,73 @@ public class UserService implements UserServiceLocal {
     private DataSource dataSource;
 
     @Override
-    public long create(String username, String password) throws SQLException, IllegalArgumentException {
+    public long create(String username, String password) throws SQLException, IllegalArgumentException, RuntimeException {
         if(username.length() > 40){
             throw new IllegalArgumentException("Username should be shorter than 40 characters!");
         }
         if(username.length() < 3){
             throw new IllegalArgumentException("Username should have at least 3 characters!");
         }
-        // Already exists
-        // Password not empty / not too long
-        
-        // Else server error
+        if(password.length() > 50){
+            throw new IllegalArgumentException("Password should be shorter than 50 characters!");
+        }
+        if(password.length() < 3){
+            throw new IllegalArgumentException("Password should have at least 3 characters!");
+        }
         
         connection = dataSource.getConnection();
+        
+        // Check if user already exists
+        pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            throw new IllegalArgumentException("Username is already in use!");
+        }
+        
+        // Create new user
         pstmt = connection.prepareStatement("INSERT INTO users (username, password) VALUE (?,?)", Statement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, username);
         pstmt.setString(2, password);
 
         pstmt.executeUpdate();
-        ResultSet rs = pstmt.getGeneratedKeys();
+        rs = pstmt.getGeneratedKeys();
         connection.close();
 
-        if (rs.next()) {
+        if(rs.next()){
             return rs.getInt(1);
+        } else{
+            throw new RuntimeException("Internal server error!");
         }
-        
-        return -1;
     }
 
     @Override
     public long login(String username, String password) throws SQLException, IllegalArgumentException {
         connection = dataSource.getConnection();
+        // Check if user exists
+        pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+        if(!rs.next()){
+            throw new IllegalArgumentException("User does not exist");
+        }
+        
         pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
         pstmt.setString(1, username);
         pstmt.setString(2, password);
-        ResultSet rs = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
         connection.close();
 
         if (rs.next()) {
             return rs.getInt("id");
-        }
-        
-        return -1;
+        } else{
+            throw new IllegalArgumentException("Wrong password entered!");
+        }  
     }
 
     @Override
-    public User get(long id) throws SQLException, IllegalArgumentException {
+    public User get(long id) throws SQLException {
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
         pstmt.setLong(1, id);
@@ -87,11 +108,11 @@ public class UserService implements UserServiceLocal {
             return new User(rs.getString("username"), rs.getString("password"));
         }
         
-        return null;
+        throw new IllegalArgumentException("User doesn't exist");
     }
 
     @Override
-    public List<User> findAll() throws SQLException, IllegalArgumentException {
+    public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("SELECT * FROM users");
@@ -105,7 +126,7 @@ public class UserService implements UserServiceLocal {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException, IllegalArgumentException {
+    public boolean delete(long id) throws SQLException {
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("DELETE FROM users WHERE id=?");
         pstmt.setLong(1, id);
@@ -118,7 +139,7 @@ public class UserService implements UserServiceLocal {
     }
 
     @Override
-    public boolean update(long id, User user) throws SQLException, IllegalArgumentException {
+    public boolean update(long id, User user) throws SQLException {
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("UPDATE users SET username=?, password=? WHERE id=?");
         pstmt.setString(1, user.getUsername());
@@ -131,5 +152,4 @@ public class UserService implements UserServiceLocal {
 
         return rows > 0;
     }
-
 }

@@ -105,7 +105,7 @@
                                     <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="form-group col-md-6">     
-                                    <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                    <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Register">
                                 </div>
                             </form>
                         </div>

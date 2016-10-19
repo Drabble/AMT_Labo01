@@ -54,17 +54,24 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             long id = userService.create(request.getParameter("username"), request.getParameter("password"));
-            if (id != -1) {
-                request.getSession().setAttribute("id", id);
-                response.sendRedirect(request.getContextPath() + "/users");
-            } else {
-                request.setAttribute("error", "Username already exists");
-                request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+            request.getSession().setAttribute("id", id);
+            response.sendRedirect(request.getContextPath() + "/users");
+        }  catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+
+            String message;
+
+            // If we throwed an illegal argument exception retrieve message
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                message = e.getCause().getMessage();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+            // Otherwise send internal server error message
+            else {
+                message = "Internal server error!";
+            }
+
+            request.setAttribute("error", message);
+            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);;
         }
     }
 }
