@@ -7,6 +7,7 @@ package com.heig.amt.webapp.web;
 
 import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,13 +50,18 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        long id = userService.login(request.getParameter("username"), request.getParameter("password"));
-        if (id != -1) {
-            request.getSession().setAttribute("id", id);
-            response.sendRedirect(request.getContextPath() + "/users");
-        } else {
-            request.setAttribute("error", "Wrong username/password");
-            request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+        try{
+            long id = userService.login(request.getParameter("username"), request.getParameter("password"));
+            if (id != -1) {
+                request.getSession().setAttribute("id", id);
+                response.sendRedirect(request.getContextPath() + "/users");
+            } else {
+                request.setAttribute("error", "Wrong username/password");
+                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+            }
+        } catch(SQLException e){
+            request.setAttribute("error", e.getSQLState());
+                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);;
         }
     }
 

@@ -7,7 +7,10 @@ package rest;
 
 import com.heig.amt.webapp.model.User;
 import com.heig.amt.webapp.services.UserServiceLocal;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -43,47 +46,82 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<UserDTO> getUsers() {
-        List<User> users = userService.findAll();
-        return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
+        try {
+            List<User> users = userService.findAll();
+            return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
+        } catch (SQLException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public UserDTO getUser(@PathParam("userId") long userId) {
-        return userToDTO(userService.get(userId));
+        try {
+            return userToDTO(userService.get(userId));
+        } catch (SQLException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(UserLoginDTO user) {
-        if (userService.create(user.getUsername(), user.getPassword()) == -1) {
-            return Response.status(Response.Status.CONFLICT).build();
-        } else {
-            return Response.status(Response.Status.CREATED).build();
+        try {
+            if (userService.create(user.getUsername(), user.getPassword()) == -1) {
+                return Response.status(Response.Status.CONFLICT).build();
+            } else {
+                return Response.status(Response.Status.CREATED).build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return Response.status(Response.Status.CONFLICT).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public Response updateUser(@PathParam("userId") long userId, UserLoginDTO user) {
-        if (userService.update(userId, UserLoginDTOToUser(user))) {
-            return Response.status(Response.Status.OK).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        try {
+            if (userService.update(userId, UserLoginDTOToUser(user))) {
+                return Response.status(Response.Status.OK).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return Response.status(Response.Status.OK).build();
     }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public Response deleteUser(@PathParam("userId") long userId) {
-        if (userService.delete(userId)) {
-            return Response.status(Response.Status.OK).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        try {
+            if (userService.delete(userId)) {
+                return Response.status(Response.Status.OK).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return Response.status(Response.Status.OK).build();
     }
 
     private UserDTO userToDTO(User user) {

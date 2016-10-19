@@ -3,6 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+// TODO
+// Login / Register error exception
+// Erreur authfilter dochain ?
+// Erreur API REST le premier appel ??
+// Commentaire / Entete
+// Indenter, readme (postman, jmeter, API REST...), (commentaire pour les apis publique ? )
+// Nettoyer repo github
+// Gestion des erreurs API rest
+// PATCH vs PUT ?   
+// FIn docker
 package com.heig.amt.webapp.web;
 
 import java.io.IOException;

@@ -7,6 +7,9 @@ package com.heig.amt.webapp.web;
 
 import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,13 +52,19 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        long id = userService.create(request.getParameter("username"), request.getParameter("password"));
-        if (id != -1) {
-            request.getSession().setAttribute("id", id);
-            response.sendRedirect(request.getContextPath() + "/users");
-        } else {
-            request.setAttribute("error", "Username already exists");
-            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+        try {
+            long id = userService.create(request.getParameter("username"), request.getParameter("password"));
+            if (id != -1) {
+                request.getSession().setAttribute("id", id);
+                response.sendRedirect(request.getContextPath() + "/users");
+            } else {
+                request.setAttribute("error", "Username already exists");
+                request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

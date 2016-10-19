@@ -6,6 +6,7 @@
 package com.heig.amt.webapp.services;
 
 import com.heig.amt.webapp.model.User;
+import java.sql.SQLException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -16,15 +17,15 @@ import javax.ejb.Local;
 @Local
 public interface UserServiceLocal {
 
-    public long create(String username, String password);
+    public long create(String username, String password) throws SQLException, IllegalArgumentException;
 
-    public long login(String username, String password);
+    public long login(String username, String password) throws SQLException, IllegalArgumentException;
 
-    public User get(long id);
+    public User get(long id) throws SQLException, IllegalArgumentException;
 
-    public boolean delete(long id);
+    public boolean delete(long id) throws SQLException, IllegalArgumentException;
 
-    public boolean update(long id, User user);
+    public boolean update(long id, User user) throws SQLException, IllegalArgumentException;
 
-    public List<User> findAll();
+    public List<User> findAll() throws SQLException, IllegalArgumentException;
 }

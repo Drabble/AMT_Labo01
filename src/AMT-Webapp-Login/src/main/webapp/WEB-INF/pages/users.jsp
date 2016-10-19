@@ -22,7 +22,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
         <!-- Theme CSS -->
-        <link href="${pageContext.request.contextPath}/resources/css/grayscale.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/css/whitescale.css" rel="stylesheet">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +36,7 @@
     <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
         <!-- Navigation -->
-        <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-custom navbar-fixed-top top-nav-collapse" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
@@ -83,39 +83,25 @@
             <!-- /.container -->
         </nav>
 
-        <!-- Intro Header -->
-        <header class="intro">
-            <div class="intro-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8 col-md-offset-2">
-                            <h1 class="brand-heading">WELCOME</h1>
-                            <p>Here is a list of every users</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
         <!-- User list Section -->
-        <section id="test" class="container content-section text-center">
+        <section id="content" class="container content-section text-center">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>List of users</h2>
-                    <div id="users" class="text-left">
-                        <ul>
-                        </ul>
+                    <div id="users">
+                        <table class="table">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th>no</th>
+                                    <th>username</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div><br/><br/>
                 </div>
             </div>
         </section>
-
-        <!-- Footer -->
-        <footer>
-            <div class="container text-center">
-                <p>Copyright &copy; AMT Webapp 2016</p>
-            </div>
-        </footer>
 
         <!-- jQuery -->
         <script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.js"></script>
@@ -127,7 +113,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
         <!-- Theme JavaScript -->
-        <script src="${pageContext.request.contextPath}/resources/js/grayscale.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/whitescale.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -138,7 +124,7 @@
                     dataType: 'json',
                     success: function (users) {
                         $.each(users, function (i, user) {
-                            $("#users ul").append("<li><p>" + user.username + "</p></li>");
+                            $("#users tbody").append("<tr><th scope=\"row\">" + (i + 1) + "</th><td>" + user.username + "</td></tr>");
                         })
                     }
                 });
