@@ -15,6 +15,7 @@
 // FIn docker
 // Afficher erreur + id dans les réponses REST
 // Ajouter get dans postman
+// Tableau des utilisateurs avec datatable
 package com.heig.amt.webapp.web;
 
 import java.io.IOException;
