@@ -4,18 +4,17 @@
  * and open the template in the editor.
  */
 // TODO
-// Login / Register error exception
-// Erreur authfilter dochain ?
-// Erreur API REST le premier appel ??
+// Tester les erreurs...
 // Commentaire / Entete
 // Indenter, readme (postman, jmeter, API REST...), (commentaire pour les apis publique ? )
 // Nettoyer repo github
-// Gestion des erreurs API rest
-// PATCH vs PUT ?   
-// FIn docker
+// Gestion des erreurs API rest  
+// Update docker
 // Afficher erreur + id dans les réponses REST
 // Ajouter get dans postman
 // Tableau des utilisateurs avec datatable
+// Mettre le package rest au bon endroit
+// Ajout nom prenom adresse email pour les comptes
 package com.heig.amt.webapp.web;
 
 import java.io.IOException;
