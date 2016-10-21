@@ -1,13 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * File             : User.java
+ * Authors          : Antoine Drabble & Guillaume Serneels
+ * Last Modified    : 21.10.2016
  */
 package com.heig.amt.webapp.model;
 
 /**
- *
- * @author antoi
+ * User Model
+ * @author Antoine Drabble & Guillaume Serneels
  */
 public class User {
 
