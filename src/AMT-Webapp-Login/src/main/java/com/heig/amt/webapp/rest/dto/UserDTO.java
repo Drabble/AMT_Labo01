@@ -1,47 +1,38 @@
 /*
- * File             : User.java
+ * File             : UserDTO.java
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */
-package com.heig.amt.webapp.model;
+package com.heig.amt.webapp.rest.dto;
 
 /**
- * User Model
- * @author Antoine Drabble & Guillaume Serneels
+ *
+ * @author antoi
  */
-public class User {
+public class UserDTO {
 
     private String username;
-    private String password;
     private String email;
     private String firstname;
     private String lastname;
 
-    public User() {
+    public UserDTO(){
+        
     }
-
-    public User(String username, String password, String email, String firstname, String lastname) {
+    
+    public UserDTO(String username, String email, String firstname, String lastname) {
         this.username = username;
-        this.password = password;
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
     }
-    
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -67,5 +58,5 @@ public class User {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-
+    
 }

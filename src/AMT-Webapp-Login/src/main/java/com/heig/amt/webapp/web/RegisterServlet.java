@@ -7,7 +7,6 @@ package com.heig.amt.webapp.web;
 
 import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -53,7 +52,9 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            long id = userService.create(request.getParameter("username"), request.getParameter("password"));
+            long id = userService.create(request.getParameter("username"), 
+                    request.getParameter("password"), request.getParameter("email"), 
+                    request.getParameter("firstname"), request.getParameter("lastname"));
             request.getSession().setAttribute("id", id);
             response.sendRedirect(request.getContextPath() + "/users");
         }  catch (Exception e) {

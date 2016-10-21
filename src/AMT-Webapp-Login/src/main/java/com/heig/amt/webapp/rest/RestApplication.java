@@ -3,7 +3,7 @@
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */
-package rest;
+package com.heig.amt.webapp.rest;
 
 import java.util.HashMap;
 import java.util.Map;

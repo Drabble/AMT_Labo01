@@ -3,19 +3,17 @@
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */
-package rest;
+package com.heig.amt.webapp.rest;
 
 import com.heig.amt.webapp.model.User;
 import com.heig.amt.webapp.services.UserServiceLocal;
 import com.heig.amt.webapp.web.LoginServlet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.servlet.ServletException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,8 +26,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import rest.dto.UserDTO;
-import rest.dto.UserLoginDTO;
+import com.heig.amt.webapp.rest.dto.UserDTO;
+import com.heig.amt.webapp.rest.dto.UserLoginDTO;
 
 /**
  *
@@ -73,7 +71,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(UserLoginDTO user) {
         try {
-            if (userService.create(user.getUsername(), user.getPassword()) == -1) {
+            if (userService.create(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstname(), user.getLastname()) == -1) {
                 return Response.status(Response.Status.CONFLICT).build();
             } else {
                 return Response.status(Response.Status.CREATED).build();
@@ -141,10 +139,13 @@ public class UserResource {
     }
 
     private UserDTO userToDTO(User user) {
-        return new UserDTO(user.getUsername());
+        return new UserDTO(user.getUsername(), user.getEmail(), 
+                user.getFirstname(), user.getLastname());
     }
 
     private User UserLoginDTOToUser(UserLoginDTO userLoginDTO) {
-        return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+        return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword(), 
+                userLoginDTO.getEmail(), userLoginDTO.getFirstname(), 
+                userLoginDTO.getLastname());
     }
 }

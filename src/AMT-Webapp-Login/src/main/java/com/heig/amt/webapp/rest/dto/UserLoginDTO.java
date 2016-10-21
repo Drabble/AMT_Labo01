@@ -1,15 +1,15 @@
 /*
- * File             : User.java
+ * File             : UserDTO.java
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */
-package com.heig.amt.webapp.model;
+package com.heig.amt.webapp.rest.dto;
 
 /**
- * User Model
- * @author Antoine Drabble & Guillaume Serneels
+ *
+ * @author antoi
  */
-public class User {
+public class UserLoginDTO {
 
     private String username;
     private String password;
@@ -17,31 +17,24 @@ public class User {
     private String firstname;
     private String lastname;
 
-    public User() {
+    public UserLoginDTO(){
+        
     }
-
-    public User(String username, String password, String email, String firstname, String lastname) {
+    
+    public UserLoginDTO(String username, String password, String email, String firstname, String lastname) {
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
     }
-    
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -68,4 +61,12 @@ public class User {
         this.lastname = lastname;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
 }

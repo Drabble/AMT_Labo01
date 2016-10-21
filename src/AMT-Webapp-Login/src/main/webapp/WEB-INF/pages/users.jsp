@@ -30,7 +30,7 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-
+        <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
     </head>
 
     <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -89,8 +89,8 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>List of users</h2>
                     <div id="users">
-                        <table class="table">
-                            <thead class="thead-inverse">
+                        <table id="userList" class="display">
+                            <thead>
                                 <tr>
                                     <th>no</th>
                                     <th>username</th>
@@ -115,6 +115,8 @@
         <!-- Theme JavaScript -->
         <script src="${pageContext.request.contextPath}/resources/js/whitescale.js"></script>
 
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        
         <script>
             $(document).ready(function () {
                 $.ajax({
@@ -124,8 +126,9 @@
                     dataType: 'json',
                     success: function (users) {
                         $.each(users, function (i, user) {
-                            $("#users tbody").append("<tr><th scope=\"row\">" + (i + 1) + "</th><td>" + user.username + "</td></tr>");
+                            $("#users tbody").append("<tr><th>" + (i + 1) + "</th><td>" + user.username + "</td></tr>");
                         })
+                        $('#userList').DataTable();
                     }
                 });
             });

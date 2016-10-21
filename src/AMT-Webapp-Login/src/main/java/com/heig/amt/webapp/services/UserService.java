@@ -31,7 +31,7 @@ public class UserService implements UserServiceLocal {
     private DataSource dataSource;
 
     @Override
-    public long create(String username, String password) throws SQLException, IllegalArgumentException, RuntimeException {
+    public long create(String username, String password, String email, String firstname, String lastname) throws SQLException, IllegalArgumentException, RuntimeException {
         if(username.length() > 40){
             throw new IllegalArgumentException("Username should be shorter than 40 characters!");
         }
@@ -43,6 +43,24 @@ public class UserService implements UserServiceLocal {
         }
         if(password.length() < 3){
             throw new IllegalArgumentException("Password should have at least 3 characters!");
+        }
+        if(email.length() > 40){
+            throw new IllegalArgumentException("Email should be shorter than 40 characters!");
+        }
+        if(email.length() < 3){
+            throw new IllegalArgumentException("Email should have at least 3 characters!");
+        }
+        if(firstname.length() > 50){
+            throw new IllegalArgumentException("Firstname should be shorter than 50 characters!");
+        }
+        if(firstname.length() < 3){
+            throw new IllegalArgumentException("Firstname should have at least 3 characters!");
+        }
+        if(lastname.length() > 50){
+            throw new IllegalArgumentException("Lastname should be shorter than 50 characters!");
+        }
+        if(lastname.length() < 3){
+            throw new IllegalArgumentException("Lastname should have at least 3 characters!");
         }
         
         connection = dataSource.getConnection();
@@ -57,9 +75,12 @@ public class UserService implements UserServiceLocal {
         }
         
         // Create new user
-        pstmt = connection.prepareStatement("INSERT INTO users (username, password) VALUE (?,?)", Statement.RETURN_GENERATED_KEYS);
+        pstmt = connection.prepareStatement("INSERT INTO users (username, password, email, firstname, lastname) VALUE (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, username);
         pstmt.setString(2, password);
+        pstmt.setString(3, email);
+        pstmt.setString(4, firstname);
+        pstmt.setString(5, lastname);
 
         pstmt.executeUpdate();
         rs = pstmt.getGeneratedKeys();
@@ -105,7 +126,9 @@ public class UserService implements UserServiceLocal {
         connection.close();
 
         if (rs.next()) {
-            return new User(rs.getString("username"), rs.getString("password"));
+            return new User(rs.getString("username"), rs.getString("password"), 
+                    rs.getString("email"), rs.getString("firstname"), 
+                    rs.getString("lastname"));
         }
         
         throw new IllegalArgumentException("User doesn't exist");
@@ -120,7 +143,9 @@ public class UserService implements UserServiceLocal {
         connection.close();
 
         while (rs.next()) {
-            users.add(new User(rs.getString("username"), rs.getString("password")));
+            users.add(new User(rs.getString("username"), rs.getString("password"), 
+                    rs.getString("email"), rs.getString("firstname"), 
+                    rs.getString("lastname")));
         }
         return users;
     }
@@ -141,10 +166,14 @@ public class UserService implements UserServiceLocal {
     @Override
     public boolean update(long id, User user) throws SQLException {
         connection = dataSource.getConnection();
-        pstmt = connection.prepareStatement("UPDATE users SET username=?, password=? WHERE id=?");
+        pstmt = connection.prepareStatement("UPDATE users SET username=?, password=?, "
+                + "email=?, firstname=?, lastname=? WHERE id=?");
         pstmt.setString(1, user.getUsername());
         pstmt.setString(2, user.getPassword());
-        pstmt.setLong(3, (int) id);
+        pstmt.setString(3, user.getEmail());
+        pstmt.setString(4, user.getFirstname());
+        pstmt.setString(5, user.getLastname());
+        pstmt.setLong(6, (int) id);
 
         int rows = pstmt.executeUpdate();
 

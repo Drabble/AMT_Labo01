@@ -17,7 +17,7 @@ import javax.ejb.Local;
 @Local
 public interface UserServiceLocal {
 
-    public long create(String username, String password) throws SQLException, IllegalArgumentException, RuntimeException;
+    public long create(String username, String password, String email, String firstname, String lastname) throws SQLException, IllegalArgumentException, RuntimeException;
 
     public long login(String username, String password) throws SQLException, IllegalArgumentException;
 
