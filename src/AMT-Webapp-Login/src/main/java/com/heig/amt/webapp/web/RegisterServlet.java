@@ -9,6 +9,7 @@ import com.heig.amt.webapp.services.UserServiceLocal;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,6 +65,9 @@ public class RegisterServlet extends HttpServlet {
 
             // If we throwed an illegal argument exception retrieve message
             if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+                message = e.getCause().getMessage();
+            }
+            else if(e.getCause() != null && e.getCause().getClass().getSimpleName().equals("DuplicateKeyException")){
                 message = e.getCause().getMessage();
             }
             // Otherwise send internal server error message

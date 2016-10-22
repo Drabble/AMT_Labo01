@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
@@ -31,7 +32,7 @@ public class UserService implements UserServiceLocal {
     private DataSource dataSource;
 
     @Override
-    public long create(String username, String password, String email, String firstname, String lastname) throws SQLException, IllegalArgumentException, RuntimeException {
+    public long create(String username, String password, String email, String firstname, String lastname) throws SQLException, IllegalArgumentException, RuntimeException, DuplicateKeyException {
         if(username.length() > 40){
             throw new IllegalArgumentException("Username should be shorter than 40 characters!");
         }
@@ -71,7 +72,7 @@ public class UserService implements UserServiceLocal {
         ResultSet rs = pstmt.executeQuery();
 
         if (rs.next()) {
-            throw new IllegalArgumentException("Username is already in use!");
+            throw new DuplicateKeyException("Username is already in use!");
         }
         
         // Create new user
@@ -164,7 +165,7 @@ public class UserService implements UserServiceLocal {
     }
 
     @Override
-    public boolean update(long id, User user) throws SQLException, IllegalArgumentException {
+    public boolean update(long id, User user) throws SQLException, IllegalArgumentException, DuplicateKeyException {
         if(user.getUsername().length() > 40){
             throw new IllegalArgumentException("Username should be shorter than 40 characters!");
         }
@@ -197,6 +198,17 @@ public class UserService implements UserServiceLocal {
         }
         
         connection = dataSource.getConnection();
+        
+        // Check if username already exists
+        pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND id != ?");
+        pstmt.setString(1, user.getUsername());
+        pstmt.setLong(2, id);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            throw new DuplicateKeyException("Username is already in use!");
+        }
+        
         pstmt = connection.prepareStatement("UPDATE users SET username=?, password=?, "
                 + "email=?, firstname=?, lastname=? WHERE id=?");
         pstmt.setString(1, user.getUsername());
