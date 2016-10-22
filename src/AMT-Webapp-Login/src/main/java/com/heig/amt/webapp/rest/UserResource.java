@@ -6,6 +6,7 @@
 package com.heig.amt.webapp.rest;
 
 import com.heig.amt.webapp.model.User;
+import com.heig.amt.webapp.rest.dto.ErrorDTO;
 import com.heig.amt.webapp.services.UserServiceLocal;
 import com.heig.amt.webapp.web.LoginServlet;
 import java.util.List;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import com.heig.amt.webapp.rest.dto.UserDTO;
 import com.heig.amt.webapp.rest.dto.UserLoginDTO;
+import com.heig.amt.webapp.rest.dto.ErrorDTO;
 
 /**
  *
@@ -45,25 +47,28 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<UserDTO> getUsers() {
+    public Response getUsers() {
         try {
             List<User> users = userService.findAll();
-            return users.stream().map(u -> userToDTO(u)).collect(Collectors.toList());
+            return Response.ok(users.stream().map(u -> userToDTO(u)).collect(Collectors.toList()), MediaType.APPLICATION_JSON).build();
         }  catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
-            return null;
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error")).build();
         }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
-    public UserDTO getUser(@PathParam("userId") long userId) {
+    public Response getUser(@PathParam("userId") long userId) {
         try {
-            return userToDTO(userService.get(userId));
+            return Response.ok(userToDTO(userService.get(userId)), MediaType.APPLICATION_JSON).build();
+        } catch(IllegalArgumentException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDTO(e.getCause().getMessage())).build();
         } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
-            return null;
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error")).build();
         }
     }
 

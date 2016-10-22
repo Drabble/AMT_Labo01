@@ -118,7 +118,7 @@ public class UserService implements UserServiceLocal {
     }
 
     @Override
-    public User get(long id) throws SQLException {
+    public User get(long id) throws SQLException, IllegalArgumentException {
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
         pstmt.setLong(1, id);
@@ -164,7 +164,38 @@ public class UserService implements UserServiceLocal {
     }
 
     @Override
-    public boolean update(long id, User user) throws SQLException {
+    public boolean update(long id, User user) throws SQLException, IllegalArgumentException {
+        if(user.getUsername().length() > 40){
+            throw new IllegalArgumentException("Username should be shorter than 40 characters!");
+        }
+        if(user.getUsername().length() < 3){
+            throw new IllegalArgumentException("Username should have at least 3 characters!");
+        }
+        if(user.getPassword().length() > 50){
+            throw new IllegalArgumentException("Password should be shorter than 50 characters!");
+        }
+        if(user.getPassword().length() < 3){
+            throw new IllegalArgumentException("Password should have at least 3 characters!");
+        }
+        if(user.getEmail().length() > 40){
+            throw new IllegalArgumentException("Email should be shorter than 40 characters!");
+        }
+        if(user.getEmail().length() < 3){
+            throw new IllegalArgumentException("Email should have at least 3 characters!");
+        }
+        if(user.getFirstname().length() > 50){
+            throw new IllegalArgumentException("Firstname should be shorter than 50 characters!");
+        }
+        if(user.getFirstname().length() < 3){
+            throw new IllegalArgumentException("Firstname should have at least 3 characters!");
+        }
+        if(user.getLastname().length() > 50){
+            throw new IllegalArgumentException("Lastname should be shorter than 50 characters!");
+        }
+        if(user.getLastname().length() < 3){
+            throw new IllegalArgumentException("Lastname should have at least 3 characters!");
+        }
+        
         connection = dataSource.getConnection();
         pstmt = connection.prepareStatement("UPDATE users SET username=?, password=?, "
                 + "email=?, firstname=?, lastname=? WHERE id=?");

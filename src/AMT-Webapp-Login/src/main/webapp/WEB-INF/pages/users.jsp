@@ -30,7 +30,7 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-2.2.3/dt-1.10.12/datatables.min.css"/>
     </head>
 
     <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -89,11 +89,14 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>List of users</h2>
                     <div id="users">
-                        <table id="userList" class="display">
+                        <table id="userList" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>no</th>
-                                    <th>username</th>
+                                    <th>No</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -115,7 +118,7 @@
         <!-- Theme JavaScript -->
         <script src="${pageContext.request.contextPath}/resources/js/whitescale.js"></script>
 
-        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-2.2.3/dt-1.10.12/datatables.min.js"></script>
         
         <script>
             $(document).ready(function () {
@@ -126,7 +129,9 @@
                     dataType: 'json',
                     success: function (users) {
                         $.each(users, function (i, user) {
-                            $("#users tbody").append("<tr><th>" + (i + 1) + "</th><td>" + user.username + "</td></tr>");
+                            $("#users tbody").append("<tr><th>" + (i + 1) + "</th><td>" + 
+                                    user.username + "</td><td>" + user.email + "</td><td>" + 
+                                    user.firstname + "</td><td>" + user.lastname + "</td></tr>");
                         })
                         $('#userList').DataTable();
                     }
