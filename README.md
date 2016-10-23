@@ -154,8 +154,9 @@ After logging in, a list of every registered users is displayed on the users hom
 The administration console is accessible at http://127.0.0.1:4848 if you're using 'Docker for Mac'/'Docker for PC' or http://192.168.99.100:4848 if you are using the Docker Machine.
 
 The default glassfish admin credentials are:
-User Name:	admin	
-Password: glassfish
+
+* User Name:	admin	
+* Password: glassfish
 
 ## Testing
 
