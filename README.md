@@ -15,12 +15,10 @@ contains simple web application allowing users to create an account and validate
 This application has been developed 
 
 
-## Repository's content
-
 
 ## The web application
 
-The src folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses EJB for the services. The database is stored inside a singleton EJB.
+The **src** folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses EJB for the services. The database is stored inside a singleton EJB.
 
 
 ## REST API Documentation
@@ -74,7 +72,7 @@ The response will contain the deletes user's id
 
 ### Docker compose
 
-The following docker-compose.yml file is used to bring up the whole set up:
+The **topology-amt** folder contains the docker-compose.yml file which is used to bring up the whole set up:
 
 ```
 version: '2'
@@ -102,11 +100,21 @@ services:
       - mysql:db
 ```
 
-It instantiates these three docker images:
+These docker images are stored in the **images** folder located at the root of our repository. 
 
- * The glassfish application server
- * The mysql database
- * The phpmyadmin 
+The process instantiates these three docker images:
+
+ * The glassfish application server, located in the **glassfish** folder
+ * The mysql database, located in the  **mysql** folder
+ * The phpmyadmin to access teh database, located in the **phpmyadmin** folder
+
+Within the **mysql** image folder there is a **data** folder containing two sql files 
+	* **a_webapp_schema.sql** to create the database schema
+	* **b_webapp_data.sql** to insert data in our database
+The Dockerfile of this image copies these two file to the **/docker-entrypoint-initdb.d/** within the mysql container. All the .sql content of this file is automatically executed when the database container is instantiated.
+
+Within the **glassfish** folder there is an **apps** folder. This is where we put the .war file of our web application. The Dockerfile of the glassfish server specifies that this .war file is copied to the **autodeploy** folder of the application server.
+
 
 
 ### Quick start
@@ -149,4 +157,4 @@ The **jmeter_test** folder located in the root of our repository contains a JMet
 
 ## Known issues
 
-We have noticed a bug, probably coming from Glassfish, which provokes an HTTP internal server error on the first execution of every HTTP query, be it from the client browser or from Postman. A refresh in the browser or a re-execution in Postman then produces the expected result.
+We have noticed a bug, probably coming from Glassfish, which sometimes provokes an HTTP internal server error on the first execution of every HTTP query, be it from the client browser or from Postman. A refresh in the browser or a re-execution in Postman then produces the expected result.
