@@ -1,5 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!--
+ * File             : users.jsp
+ * Authors          : Antoine Drabble & Guillaume Serneels
+ * Last Modified    : 21.10.2016
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -119,7 +124,7 @@
         <script src="${pageContext.request.contextPath}/resources/js/whitescale.js"></script>
 
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-2.2.3/dt-1.10.12/datatables.min.js"></script>
-        
+
         <script>
             $(document).ready(function () {
                 $.ajax({
@@ -129,8 +134,8 @@
                     dataType: 'json',
                     success: function (users) {
                         $.each(users, function (i, user) {
-                            $("#users tbody").append("<tr><th>" + (i + 1) + "</th><td>" + 
-                                    user.username + "</td><td>" + user.email + "</td><td>" + 
+                            $("#users tbody").append("<tr><th>" + (i + 1) + "</th><td>" +
+                                    user.username + "</td><td>" + user.email + "</td><td>" +
                                     user.firstname + "</td><td>" + user.lastname + "</td></tr>");
                         })
                         $('#userList').DataTable();

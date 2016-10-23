@@ -26,78 +26,75 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
+ * This class is used to filter the access to the protected pages.
+ * It is redirects from the root url to the /index url, from /login
+ * or /register to /user if the user is logged and from /users to /login if the
+ * user is not logged in.
+ * All this processing is done in the doBeforeProcessing method.
+ * The other methods are created by default and remain unchanged as seen with
+ * Mr. Olivier Liechti.
  * 
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class AuthFilter implements Filter {
-    
+
     private static final boolean debug = false;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-    
+
     public AuthFilter() {
-    }    
-    
+    }
+
+    /**
+     * Redirects from the root url to the /index url, from /login
+     * or /register to /user if the user is logged and from /users to /login if the
+     * user is not logged in.
+     * 
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException 
+     */
     private void doBeforeProcessing(RequestWrapper request, ResponseWrapper response)
             throws IOException, ServletException {
         if (debug) {
             log("AuthFilter:DoBeforeProcessing");
         }
-
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a filter that implements setParameter() on a request
-        // wrapper could set parameters on the request before passing it on
-        // to the filter chain.
-        /*
-	String [] valsOne = {"val1a", "val1b"};
-	String [] valsTwo = {"val2a", "val2b", "val2c"};
-	request.setParameter("name1", valsOne);
-	request.setParameter("nameTwo", valsTwo);
-         */
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        /*
-	for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    String values[] = request.getParameterValues(name);
-	    int n = values.length;
-	    StringBuffer buf = new StringBuffer();
-	    buf.append(name);
-	    buf.append("=");
-	    for(int i=0; i < n; i++) {
-	        buf.append(values[i]);
-	        if (i < n-1)
-	            buf.append(",");
-	    }
-	    log(buf.toString());
-	}
-         */
         
         // Transform ServletRequest to HttpServletRequest for redirect
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Only allow access to Index if not logged in
+        // Redirect from / to /index
         if (httpRequest.getRequestURI().compareTo(httpRequest.getContextPath() + "/") == 0) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/index");
-        } else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/login")
+        } 
+        // Redirect from /login and /register to /users if the user is logged in
+        else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/login")
                 || httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/register")) {
             if (httpRequest.getSession().getAttribute("id") != null) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/users");
             }
-        } // Only allow access to Private if logged in
+        } 
+        // Redirect from /users to /login if the user is not logged in
         else if (httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/users")) {
             if (httpRequest.getSession().getAttribute("id") == null) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
             }
         }
-    }    
-    
+    }
+
+    /**
+     * 
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException 
+     */
     private void doAfterProcessing(RequestWrapper request, ResponseWrapper response)
             throws IOException, ServletException {
         if (debug) {
@@ -153,7 +150,7 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         if (debug) {
             log("AuthFilter:doFilter()");
         }
@@ -168,11 +165,11 @@ public class AuthFilter implements Filter {
         // include requests.
         RequestWrapper wrappedRequest = new RequestWrapper((HttpServletRequest) request);
         ResponseWrapper wrappedResponse = new ResponseWrapper((HttpServletResponse) response);
-        
+
         doBeforeProcessing(wrappedRequest, wrappedResponse);
-        
+
         Throwable problem = null;
-        
+
         try {
             chain.doFilter(wrappedRequest, wrappedResponse);
         } catch (Throwable t) {
@@ -182,7 +179,7 @@ public class AuthFilter implements Filter {
             problem = t;
             t.printStackTrace();
         }
-        
+
         doAfterProcessing(wrappedRequest, wrappedResponse);
 
         // If there was a problem, we want to rethrow it if it is
@@ -217,16 +214,16 @@ public class AuthFilter implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
+            if (debug) {
                 log("AuthFilter: Initializing filter");
             }
         }
@@ -244,22 +241,22 @@ public class AuthFilter implements Filter {
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
-        
+
     }
-    
+
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
-        
+        String stackTrace = getStackTrace(t);
+
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -276,7 +273,12 @@ public class AuthFilter implements Filter {
             }
         }
     }
-    
+
+    /**
+     * 
+     * @param t
+     * @return 
+     */
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -290,9 +292,13 @@ public class AuthFilter implements Filter {
         }
         return stackTrace;
     }
-    
+
+    /**
+     * 
+     * @param msg 
+     */
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
 
     /**
@@ -303,7 +309,7 @@ public class AuthFilter implements Filter {
      * access to the wrapped request using the method getRequest()
      */
     class RequestWrapper extends HttpServletRequestWrapper {
-        
+
         public RequestWrapper(HttpServletRequest request) {
             super(request);
         }
@@ -312,12 +318,12 @@ public class AuthFilter implements Filter {
         // you must also override the getParameter, getParameterValues, getParameterMap,
         // and getParameterNames methods.
         protected Hashtable localParams = null;
-        
+
         public void setParameter(String name, String[] values) {
             if (debug) {
                 System.out.println("AuthFilter::setParameter(" + name + "=" + values + ")" + " localParams = " + localParams);
             }
-            
+
             if (localParams == null) {
                 localParams = new Hashtable();
                 // Copy the parameters from the underlying request.
@@ -331,7 +337,7 @@ public class AuthFilter implements Filter {
             }
             localParams.put(name, values);
         }
-        
+
         @Override
         public String getParameter(String name) {
             if (debug) {
@@ -350,7 +356,7 @@ public class AuthFilter implements Filter {
             }
             return (val == null ? null : val.toString());
         }
-        
+
         @Override
         public String[] getParameterValues(String name) {
             if (debug) {
@@ -361,7 +367,7 @@ public class AuthFilter implements Filter {
             }
             return (String[]) localParams.get(name);
         }
-        
+
         @Override
         public Enumeration getParameterNames() {
             if (debug) {
@@ -371,8 +377,8 @@ public class AuthFilter implements Filter {
                 return getRequest().getParameterNames();
             }
             return localParams.keys();
-        }        
-        
+        }
+
         @Override
         public Map getParameterMap() {
             if (debug) {
@@ -393,9 +399,9 @@ public class AuthFilter implements Filter {
      * get access to the wrapped response using the method getResponse()
      */
     class ResponseWrapper extends HttpServletResponseWrapper {
-        
+
         public ResponseWrapper(HttpServletResponse response) {
-            super(response);            
+            super(response);
         }
 
         // You might, for example, wish to know what cookies were set on the response
@@ -422,5 +428,5 @@ public class AuthFilter implements Filter {
 	}
          */
     }
-    
+
 }

@@ -16,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This Servlet relies on the UserService EJB to forward a users main page after 
- * he has logged into the app
+ * This Servlet relies on the UserService EJB to forward a users main page after
+ * he has logged into the app.
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
@@ -28,6 +29,7 @@ public class UsersServlet extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
+     * Shows the list of users page
      *
      * @param request servlet request
      * @param response servlet response
@@ -41,15 +43,15 @@ public class UsersServlet extends HttpServlet {
             request.setAttribute("username", userService.get((Long) request.getSession().getAttribute("id")).getUsername());
             request.setAttribute("id", request.getSession().getAttribute("id"));
             request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request, response);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
             String message;
 
-            // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+            // If there is a problem with the user id in the session variable
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 message = e.getCause().getMessage();
-            }
+            } 
             // Otherwise send internal server error message
             else {
                 message = "Internal server error!";

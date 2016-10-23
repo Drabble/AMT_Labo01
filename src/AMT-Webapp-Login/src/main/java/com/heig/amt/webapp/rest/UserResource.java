@@ -6,7 +6,6 @@
 package com.heig.amt.webapp.rest;
 
 import com.heig.amt.webapp.model.User;
-import com.heig.amt.webapp.rest.dto.ErrorDTO;
 import com.heig.amt.webapp.services.UserServiceLocal;
 import com.heig.amt.webapp.web.LoginServlet;
 import java.util.List;
@@ -34,16 +33,15 @@ import com.heig.amt.webapp.rest.dto.UserIdDTO;
 import javax.ejb.DuplicateKeyException;
 
 /**
- * This class regroups the business logic of our JAX-RS REST API. It allows the 
- * web service to manage users by performing CRUD actions when recieving GET, 
- * POST, PUT and DELETE HTTP Requests.
- * The @Stateless, @EJB and @Context  specifies this class as a managed compnent 
- * and allows the dependency injection of the userService EJB.
- * The @Path specifies each of the individual path used after the root path 
- * "/api"to achieve the CRUD operations
- * The @Consumes and @Produces annotations specify the type of data used, in our
+ * This class regroups the business logic of our JAX-RS REST API. It allows the
+ * web service to manage users by performing CRUD actions when receiving GET,
+ * POST, PUT and DELETE HTTP Requests. The @Stateless annotation specifies this class as 
+ * a managed component and the @EJB annotation allows dependency injection of 
+ * the userService stateless EJB. The @Path specifies each of the individual 
+ * path used after the root path "/api"to achieve the CRUD operations The 
+ * @Consumes and @Produces annotations specify the type of data used, in our
  * case it's JSON
- * 
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
@@ -56,10 +54,12 @@ public class UserResource {
 
     @Context
     UriInfo uriInfo;
+
     /**
-     * This method returns the list of every users when an HTTP GET request is 
+     * This method returns the list of every users when an HTTP GET request is
      * sent on the "/api/users" url
-     * @return a Response object containing the list of users 
+     *
+     * @return a Response object containing the list of users
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -67,16 +67,18 @@ public class UserResource {
         try {
             List<User> users = userService.findAll();
             return Response.ok(users.stream().map(u -> userToDTO(u)).collect(Collectors.toList()), MediaType.APPLICATION_JSON).build();
-        }  catch (Exception e) {
+        } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error")).build();
         }
     }
+
     /**
-     * This methods returns a specific user when an HTTP GET request is 
-     * sent on the "/api/users/{userId}" url
+     * This methods returns a specific user when an HTTP GET request is sent on
+     * the "/api/users/{userId}" url
+     *
      * @param userId the id of the user to return
-     * @return a Response containing the User in the form of a Data transfer 
+     * @return a Response containing the User in the form of a Data transfer
      * object UserDTO
      */
     @GET
@@ -89,23 +91,24 @@ public class UserResource {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
             // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+            if (e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO(e.getCause().getCause().getMessage())).build();
-            }
-            // Otherwise send internal server error message
+            } // Otherwise send internal server error message
             else {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error!")).build();
             }
-
-            
         }
     }
+
     /**
-     * This methods creates a new User  when an HTTP POST request is 
-     * sent on the "/api/users" url
+     * This methods creates a new User when an HTTP POST request is sent on the
+     * "/api/users" url
+     *
      * @param user the user in the form of a Data Transfer Object UserLoginDTO
-     * @return A response with status code CREATED  and the user's ID in a DTO 
-     * if everithing went well or with status code CONFLICT otherwise
+     * @return A response with status code CREATED and the user's ID in a DTO if
+     * everything went well. If there a user already exists, HTTP CONFLICT is returner.
+     * If there is an error in the POST parameters, a BAD_REQUEST is returned.
+     * Finally, if there is an error with the MySQL database, INTERNAL_SERVER_ERROR is returned.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -114,28 +117,31 @@ public class UserResource {
         try {
             long id = userService.create(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstname(), user.getLastname());
             return Response.status(Response.Status.CREATED).entity(new UserIdDTO(id)).build();
-        }  catch(DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             return Response.status(Response.Status.CONFLICT).entity(new ErrorDTO(e.getMessage())).build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
-            if(e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())){
+            // If there is an error with the POST parameters
+            if (e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDTO(e.getCause().getCause().getMessage())).build();
-            }
-            // Otherwise send internal server error message
+            } // Otherwise send internal server error message
             else {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error!")).build();
             }
         }
     }
+
     /**
-     * This methods allows the web service to update an existing User when an 
+     * This methods allows the web service to update an existing User when an
      * HTTP PUT request is sent on the "/api/users" url
+     *
      * @param userId the id of the user to update
      * @param user the user in the form of a Data Transfer Object UserLoginDTO
-     * @return A response with status code OK and the user's ID in a DTO if 
-     * everithing went well or with status code NOT_FOUND, CONFLICT, 
-     * SEVERE, BAD_REQUEST or INTERNAT_SERVER_ERROR otherwise
+     * @return A response with status code OK and the user's ID in a DTO if
+     * everything went well or with status code NOT_FOUND, CONFLICT,
+     * BAD_REQUEST or INTERNAL_SERVER_ERROR otherwise. The errors are the same
+     * as in the addUser method.
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -148,28 +154,29 @@ public class UserResource {
             } else {
                 return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO("User not found!")).build();
             }
-        } catch(DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             return Response.status(Response.Status.CONFLICT).entity(new ErrorDTO(e.getMessage())).build();
         } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
-            // If we throwed an illegal argument exception retrieve message
-            if(e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())){
+            // If there is an error with the POST parameters
+            if (e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDTO(e.getCause().getCause().getMessage())).build();
-            }
-            // Otherwise send internal server error message
+            } // Otherwise send internal server error message
             else {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error!")).build();
             }
         }
     }
+
     /**
-     * This methods allows the web service to delete an existing User when an 
+     * This methods allows the web service to delete an existing User when an
      * HTTP DELETE request is sent on the "/api/users/{userId}" url
+     *
      * @param userId the id of the user to delete
      * @return A response with status code OK and the deleted user's ID in a DTO
-     * if everithing went well or with status code NOT_FOUND, SEVERE, 
-     * BAD_REQUEST or INTERNAT_SERVER_ERROR otherwise
+     * if everything went well or with status code NOT_FOUND
+     * or INTERNAL_SERVER_ERROR otherwise
      */
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -188,25 +195,29 @@ public class UserResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     /**
      * This method converts an User object to it's corresponding Data Transfer
      * Object UserDTO, this DTO doesn't contain the password
+     *
      * @param user the user to convert
      * @return the DTO resulting from the conversion
      */
     private UserDTO userToDTO(User user) {
-        return new UserDTO(user.getUsername(), user.getEmail(), 
+        return new UserDTO(user.getUsername(), user.getEmail(),
                 user.getFirstname(), user.getLastname());
     }
+
     /**
      * This method converts a Data Transfer Object UserLoginDTO (containing the
-     * password) to an User objectthis DTO doesn't contain the password
+     * password) to an User object this DTO doesn't contain the password
+     *
      * @param userLoginDTO the Data Transfer Object to convert
      * @return the resulting User objects
      */
     private User UserLoginDTOToUser(UserLoginDTO userLoginDTO) {
-        return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword(), 
-                userLoginDTO.getEmail(), userLoginDTO.getFirstname(), 
+        return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword(),
+                userLoginDTO.getEmail(), userLoginDTO.getFirstname(),
                 userLoginDTO.getLastname());
     }
 }

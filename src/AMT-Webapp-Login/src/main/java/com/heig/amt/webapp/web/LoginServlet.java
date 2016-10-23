@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This Servlet relies on the UserService EJB to provide the login feature to 
- * our web service and forwards the corresonding view to display client side. 
+ * This Servlet relies on the UserService EJB to provide the login feature to
+ * our web service and forwards the corresponding view to display client side.
  * Once a user is logged in, his id is saved inside the HTTP session.
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
@@ -31,6 +32,7 @@ public class LoginServlet extends HttpServlet {
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
+     * Show the login page
      *
      * @param request servlet request
      * @param response servlet response
@@ -46,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
+     * Tries to login the user with the POST parameters
      *
      * @param request servlet request
      * @param response servlet response
@@ -55,7 +58,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
+        try {
             long id = userService.login(request.getParameter("username"), request.getParameter("password"));
             request.getSession().setAttribute("id", id);
             response.sendRedirect(request.getContextPath() + "/users");
@@ -64,11 +67,10 @@ public class LoginServlet extends HttpServlet {
 
             String message;
 
-            // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
+            // If there is an error with the POST parameters
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 message = e.getCause().getMessage();
-            }
-            // Otherwise send internal server error message
+            } // Otherwise send internal server error message
             else {
                 message = "Internal server error!";
             }
@@ -76,7 +78,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("error", message);
             request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);;
         }
-        
+
     }
 
 }

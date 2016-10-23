@@ -1,5 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!--
+ * File             : register.jsp
+ * Authors          : Antoine Drabble & Guillaume Serneels
+ * Last Modified    : 21.10.2016
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,13 +110,13 @@
                                     <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="">
+                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="email" id="email" tabindex="3" class="form-control" placeholder="Email" value="">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="firstname" id="firstname" tabindex="1" class="form-control" placeholder="Firstname" value="">
+                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="firstname" id="firstname" tabindex="4" class="form-control" placeholder="Firstname" value="">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="lastname" id="lastname" tabindex="1" class="form-control" placeholder="Lastname" value="">
+                                    <input style="-webkit-box-shadow: 0 0 0px 1000px white inset;" type="text" name="lastname" id="lastname" tabindex="5" class="form-control" placeholder="Lastname" value="">
                                 </div>
                                 <div class="form-group col-md-6">     
                                     <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Register">

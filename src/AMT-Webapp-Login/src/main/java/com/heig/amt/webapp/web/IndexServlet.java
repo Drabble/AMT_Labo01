@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This servlet forwards the index.jsp view
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
@@ -33,6 +34,7 @@ public class IndexServlet extends HttpServlet {
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
+     * Show the index page.
      *
      * @param request servlet request
      * @param response servlet response

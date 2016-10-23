@@ -44,7 +44,7 @@ a {
     -moz-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
     &:hover,
-    &:focus {
+        &:focus {
         text-decoration: none;
         color: darken($primary,20%);
     }
@@ -65,7 +65,7 @@ a {
         font-size: 16px;
         color: white;
         &:focus,
-        &:active {
+            &:active {
             outline: none;
         }
     }
@@ -90,7 +90,7 @@ a {
                     background-color: transparent;
                 }
                 &:focus,
-                &:active {
+                    &:active {
                     outline: none;
                     background-color: transparent;
                 }
@@ -173,7 +173,7 @@ a {
     -moz-transition: background .3s ease-in-out;
     transition: background .3s ease-in-out;
     &:hover,
-    &:focus {
+        &:focus {
         outline: none;
         color: white;
         background: rgba(white, 0.1);
@@ -284,7 +284,7 @@ a {
     color: $primary;
     background-color: transparent;
     &:hover,
-    &:focus {
+        &:focus {
         border: 1px solid $primary;
         outline: none;
         color: black;

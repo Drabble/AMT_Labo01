@@ -7,30 +7,43 @@ package com.heig.amt.webapp.rest.dto;
 
 /**
  * This Data Transfer Object encapsulates the id of an User
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class UserIdDTO {
+
     private long id;
-    
-    public UserIdDTO(){
-        
+
+    public UserIdDTO() {
+
     }
+
     /**
-     * Creates the Data Transfer Object 
+     * Creates the Data Transfer Object
+     *
      * @param id the user's id
      */
     public UserIdDTO(long id) {
         this.id = id;
     }
 
+    /**
+     * Get the user id
+     * 
+     * @return the user id 
+     */
     public long getId() {
         return id;
     }
-
+    
+    /**
+     * Set the user id
+     * 
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }
-    
-    
+
 }

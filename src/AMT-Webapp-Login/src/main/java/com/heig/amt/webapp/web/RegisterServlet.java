@@ -18,15 +18,20 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This Servlet relies on the UserService EJB to provide the user registering
- * feature to our web service 
+ * feature to our web service.
+ *
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class RegisterServlet extends HttpServlet {
 
+    @EJB
+    private UserServiceLocal userService;
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
+     * Show the register page.
      *
      * @param request servlet request
      * @param response servlet response
@@ -40,11 +45,9 @@ public class RegisterServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
     }
 
-    @EJB
-    private UserServiceLocal userService;
-
     /**
      * Handles the HTTP <code>POST</code> method.
+     * Tries to register the user with the given POST parameters.
      *
      * @param request servlet request
      * @param response servlet response
@@ -55,21 +58,21 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            long id = userService.create(request.getParameter("username"), 
-                    request.getParameter("password"), request.getParameter("email"), 
+            long id = userService.create(request.getParameter("username"),
+                    request.getParameter("password"), request.getParameter("email"),
                     request.getParameter("firstname"), request.getParameter("lastname"));
             request.getSession().setAttribute("id", id);
             response.sendRedirect(request.getContextPath() + "/users");
-        }  catch (Exception e) {
+        } catch (DuplicateKeyException e) {
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+        }catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
             String message;
 
-            // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
-                message = e.getCause().getMessage();
-            }
-            else if(e.getCause() != null && e.getCause().getClass().getSimpleName().equals("DuplicateKeyException")){
+            // If there is an error in the POST parameters
+            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())) {
                 message = e.getCause().getMessage();
             }
             // Otherwise send internal server error message
@@ -78,7 +81,7 @@ public class RegisterServlet extends HttpServlet {
             }
 
             request.setAttribute("error", message);
-            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);;
+            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
         }
     }
 }

@@ -1,5 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!--
+ * File             : login.jsp
+ * Authors          : Antoine Drabble & Guillaume Serneels
+ * Last Modified    : 21.10.2016
+-->
 <!DOCTYPE html>
 <html lang="en">
 
