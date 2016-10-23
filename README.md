@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project is the result of the fist lab session for Antoine Drabble and Guillaume Serneels in the AMT Course 2016-20117 at HEIG-VD. The goal of this session was to develop and deploy a multi-tiered web application according to the JAVA EE specification.
+This project is the result of the fist lab session for Antoine Drabble and Guillaume Serneels in the AMT Course 2016-2017 at HEIG-VD. The goal of this session was to develop and deploy a multi-tiered web application according to the JAVA EE specification.
 
 In our implementation, we developed a simple web application allowing users to create an account and validate their login. This application is made available by a GlassFish web application server and relies on a MySQL database to store and retrieve user's data.
 
