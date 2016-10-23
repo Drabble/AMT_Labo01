@@ -18,7 +18,7 @@ This application has been developed
 
 ## The web application
 
-The **src** folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
+The **src** folder contains the source code of our application, AMT-Webapp-Login.It is an MVC java EE app with login/register and permissions. It implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
 
 The html template used is grayscale from startbootstrap.com
 https://startbootstrap.com/template-overviews/grayscale/
@@ -118,7 +118,7 @@ Within the **mysql** image folder there is a **data** folder containing two sql 
 
 The Dockerfile of this image copies these two file to the **/docker-entrypoint-initdb.d/** within the mysql container. All the .sql content of this file is automatically executed when the database container is instantiated.
 
-The username for the MySQL server is root and the password is adminpw. You can also use this login to connect on the phpmyadmin server which can be accessed on the following address : http://<docker_ip>:6060.
+The username for the MySQL server is root and the password is adminpw. You can also use this login to connect on the phpmyadmin server which can be accessed on the following address : http://{docker_ip}:6060.
 
 Within the **glassfish** folder there is an **apps** folder. This is where we put the .war file of our web application. The Dockerfile of the glassfish server specifies that this .war file is copied to the **autodeploy** folder of the application server.
 
