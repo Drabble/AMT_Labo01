@@ -26,47 +26,47 @@ The src folder contains the AMT-Webapp-Login source code MVC java EE app with lo
 ## REST API Documentation
 
 The base url of our api is
-````
+```
 /api
-````
+```
 
 The following HTTP methods can then be used to interract with our API
 
 ### GET	
 
 To obtain a JSON object containing the list of every registered user
-````
+```
 /api/users
-````
+```
 To obtain a JSON object containing the user corresponding to a precise id ({userId})
-````
+```
 /api/users/{userId}
-````
+```
 
 ### POST	
 
 To register a new user 
-````
+```
 /api/users
-````
+```
 The response will contain the newly created user's id
 
 ### PUT	
 
 To update an existing user by specifying his id ({userId})
 
-````
+```
 /api/users/{userId}
-````
+```
 The response will contain the updated user's id
 
 ### DELETE
 
 To delete an existing user by specifying his id ({userId})
 
-````
+```
 /api/users/{userId}
-````
+```
 The response will contain the deletes user's id
 
 
@@ -116,6 +116,7 @@ Assuming that you have installed **docker** and **docker-compose** on your machi
 cd topology-amt
 docker-compose build
 docker-compose up
+
 ```
 
 ### Access the webapp
