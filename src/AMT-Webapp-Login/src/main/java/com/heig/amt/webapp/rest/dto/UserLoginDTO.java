@@ -1,5 +1,5 @@
 /*
- * File             : UserDTO.java
+ * File             : UserLoginDTO.java
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */

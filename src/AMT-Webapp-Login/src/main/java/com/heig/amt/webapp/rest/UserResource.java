@@ -34,8 +34,18 @@ import com.heig.amt.webapp.rest.dto.UserIdDTO;
 import javax.ejb.DuplicateKeyException;
 
 /**
- *
- * @author antoi
+ * This class regroups the business logic of our JAX-RS REST API. It allows the 
+ * web service to manage users by performing CRUD actions when recieving GET, 
+ * POST, PUT and DELETE HTTP Requests.
+ * The @Stateless, @EJB and @Context  specifies this class as a managed compnent 
+ * and allows the dependency injection of the userService EJB.
+ * The @Path specifies each of the individual path used after the root path 
+ * "/api"to achieve the CRUD operations
+ * The @Consumes and @Produces annotations specify the type of data used, in our
+ * case it's JSON
+ * 
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 @Stateless
 @Path("/users")
@@ -46,7 +56,11 @@ public class UserResource {
 
     @Context
     UriInfo uriInfo;
-
+    /**
+     * This method returns the list of every users when an HTTP GET request is 
+     * sent on the "/api/users" url
+     * @return a Response object containing the list of users 
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
@@ -58,7 +72,13 @@ public class UserResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error")).build();
         }
     }
-
+    /**
+     * This methods returns a specific user when an HTTP GET request is 
+     * sent on the "/api/users/{userId}" url
+     * @param userId the id of the user to return
+     * @return a Response containing the User in the form of a Data transfer 
+     * object UserDTO
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
@@ -80,7 +100,13 @@ public class UserResource {
             
         }
     }
-
+    /**
+     * This methods creates a new User  when an HTTP POST request is 
+     * sent on the "/api/users" url
+     * @param user the user in the form of a Data Transfer Object UserLoginDTO
+     * @return A response with status code CREATED  and the user's ID in a DTO 
+     * if everithing went well or with status code CONFLICT otherwise
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -102,7 +128,15 @@ public class UserResource {
             }
         }
     }
-
+    /**
+     * This methods allows the web service to update an existing User when an 
+     * HTTP PUT request is sent on the "/api/users" url
+     * @param userId the id of the user to update
+     * @param user the user in the form of a Data Transfer Object UserLoginDTO
+     * @return A response with status code OK and the user's ID in a DTO if 
+     * everithing went well or with status code NOT_FOUND, CONFLICT, 
+     * SEVERE, BAD_REQUEST or INTERNAT_SERVER_ERROR otherwise
+     */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -129,7 +163,14 @@ public class UserResource {
             }
         }
     }
-
+    /**
+     * This methods allows the web service to delete an existing User when an 
+     * HTTP DELETE request is sent on the "/api/users/{userId}" url
+     * @param userId the id of the user to delete
+     * @return A response with status code OK and the deleted user's ID in a DTO
+     * if everithing went well or with status code NOT_FOUND, SEVERE, 
+     * BAD_REQUEST or INTERNAT_SERVER_ERROR otherwise
+     */
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -147,12 +188,22 @@ public class UserResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    /**
+     * This method converts an User object to it's corresponding Data Transfer
+     * Object UserDTO, this DTO doesn't contain the password
+     * @param user the user to convert
+     * @return the DTO resulting from the conversion
+     */
     private UserDTO userToDTO(User user) {
         return new UserDTO(user.getUsername(), user.getEmail(), 
                 user.getFirstname(), user.getLastname());
     }
-
+    /**
+     * This method converts a Data Transfer Object UserLoginDTO (containing the
+     * password) to an User objectthis DTO doesn't contain the password
+     * @param userLoginDTO the Data Transfer Object to convert
+     * @return the resulting User objects
+     */
     private User UserLoginDTOToUser(UserLoginDTO userLoginDTO) {
         return new User(userLoginDTO.getUsername(), userLoginDTO.getPassword(), 
                 userLoginDTO.getEmail(), userLoginDTO.getFirstname(), 
