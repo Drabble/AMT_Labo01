@@ -72,7 +72,7 @@ The response will contain the deletes user's id
 
 ### Docker compose
 
-The **topology-amt** folder contains the docker-compose.yml file which is used to bring up the whole set up:
+The **topology-amt** folder contains the docker-compose.yml file which is used to bring up the whole set-up:
 
 ```
 version: '2'
