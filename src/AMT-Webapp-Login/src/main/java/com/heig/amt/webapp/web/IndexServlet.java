@@ -3,18 +3,6 @@
  * Authors          : Antoine Drabble & Guillaume Serneels
  * Last Modified    : 21.10.2016
  */
-// TODO
-// Tester les erreurs...
-// Commentaire / Entete
-// Indenter, readme (postman, jmeter, API REST...), (commentaire pour les apis publique ? )
-// Nettoyer repo github
-// Gestion des erreurs API rest  
-// Update docker
-// Afficher erreur + id dans les réponses REST
-// Ajouter get dans postman
-// Tableau des utilisateurs avec datatable
-// Mettre le package rest au bon endroit
-// Ajout nom prenom adresse email pour les comptes
 package com.heig.amt.webapp.web;
 
 import java.io.IOException;
