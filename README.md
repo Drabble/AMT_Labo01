@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project is the result of the fist lab session in the AMT Course 2016-20117 at HEIG-VD. The goal of this session was to develop and deploy a multi-tiered web application according to the JAVA EE specification.
+This project is the result of the fist lab session for Antoine Drabble and Guillaume Serneels in the AMT Course 2016-20117 at HEIG-VD. The goal of this session was to develop and deploy a multi-tiered web application according to the JAVA EE specification.
 
 In our implementation, we developed a simple web application allowing users to create an account and validate their login. This application is made available by a GlassFish web application server and relies on a MySQL database to store and retrieve user's data.
 
@@ -18,7 +18,7 @@ This application has been developed
 
 ## The web application
 
-The **src** folder contains the source code of our application, AMT-Webapp-Login.It is an MVC java EE app with login/register and permissions. It implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
+The **src** folder contains the source code of our application, AMT-Webapp-Login. It is an MVC java EE app with login/register and permissions. It implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
 
 The html template used is grayscale from startbootstrap.com
 https://startbootstrap.com/template-overviews/grayscale/
@@ -181,7 +181,7 @@ The **jmeter_test** folder located in the root of our repository contains two jm
 
 * webapp_testplan_POST_create_different_users.jmx
 
-This test plan generates 10 unit groups of 20 users, each of them executes an HTTP POST request to create a new user using a randomly generated UDID as username.
+This test plan generates 10 unit groups of 20 users, each of them executes an HTTP POST request to create a new user using a randomly generated UUID as username.
 
 When the test plan is run, each request results in an **HTTP 201 Created** Response
 
