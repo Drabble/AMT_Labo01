@@ -109,8 +109,10 @@ The process instantiates these three docker images:
  * The phpmyadmin to access teh database, located in the **phpmyadmin** folder
 
 Within the **mysql** image folder there is a **data** folder containing two sql files 
-- **a_webapp_schema.sql** to create the database schema
-- **b_webapp_data.sql** to insert data in our database
+
+* **a_webapp_schema.sql** to create the database schema
+* **b_webapp_data.sql** to insert data in our database
+
 The Dockerfile of this image copies these two file to the **/docker-entrypoint-initdb.d/** within the mysql container. All the .sql content of this file is automatically executed when the database container is instantiated.
 
 Within the **glassfish** folder there is an **apps** folder. This is where we put the .war file of our web application. The Dockerfile of the glassfish server specifies that this .war file is copied to the **autodeploy** folder of the application server.
