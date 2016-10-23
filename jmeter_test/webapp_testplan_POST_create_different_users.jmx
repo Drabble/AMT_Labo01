@@ -33,8 +33,11 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-	&quot;username&quot; : &quot;utilisateur ${__UUID}&quot;,&#xd;
-	&quot;password&quot; : &quot;test&quot;&#xd;
+	&quot;username&quot; : &quot;${__UUID}&quot;,&#xd;
+	&quot;password&quot; : &quot;test&quot;,&#xd;
+	&quot;email&quot;    : &quot;test@test.ch&quot;,&#xd;
+	&quot;firstname&quot;: &quot;fabio&quot;,&#xd;
+	&quot;lastname&quot; : &quot;celestini&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -46,7 +49,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/AMT-Webapp-Login/api/users</stringProp>
+          <stringProp name="HTTPSampler.path">/AMT-Webapp-Login-1.0-SNAPSHOT/api/users</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

@@ -18,7 +18,10 @@ This application has been developed
 
 ## The web application
 
-The **src** folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses EJB for the services. The database is stored inside a singleton EJB.
+The **src** folder contains the source code of our application, AMT-Webapp-Login.It is an MVC java EE app with login/register and permissions. It implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
+
+The html template used is grayscale from startbootstrap.com
+https://startbootstrap.com/template-overviews/grayscale/
 
 
 ## REST API Documentation
@@ -106,7 +109,7 @@ The process instantiates these three docker images:
 
  * The glassfish application server, located in the **glassfish** folder
  * The mysql database, located in the  **mysql** folder
- * The phpmyadmin to access teh database, located in the **phpmyadmin** folder
+ * The phpmyadmin to access the database, located in the **phpmyadmin** folder
 
 Within the **mysql** image folder there is a **data** folder containing two sql files 
 
@@ -114,6 +117,8 @@ Within the **mysql** image folder there is a **data** folder containing two sql 
 * **b_webapp_data.sql** to insert data in our database
 
 The Dockerfile of this image copies these two file to the **/docker-entrypoint-initdb.d/** within the mysql container. All the .sql content of this file is automatically executed when the database container is instantiated.
+
+The username for the MySQL server is root and the password is adminpw. You can also use this login to connect on the phpmyadmin server which can be accessed on the following address : http://{docker_ip}:6060.
 
 Within the **glassfish** folder there is an **apps** folder. This is where we put the .war file of our web application. The Dockerfile of the glassfish server specifies that this .war file is copied to the **autodeploy** folder of the application server.
 
@@ -156,23 +161,37 @@ The administration console is accessible at http://127.0.0.1:4848 if you're usin
 The default glassfish admin credentials are:
 
 * User Name:	admin	
-* Password: glassfish
+* Password: 	glassfish
 
 ## Testing
 
+We have manually tested every success and error cases on the REST API with postman as well as on the Google Chrome web browser and every test succeeded.
+
 ### Postman
 
-The **postman_requests** folder located in the root of our repository contains a Collection of Postman requests that can be used to test our API.
+The **postman_requests** folder located in the root of our repository contains a Collection of Postman. We have created a request for every urls of our REST API. You can edit the id of the user for the DELETE, PUT and GET requests directly in the url. You can edit the POST data sent inside the body of the request for the create and update requests.
 
-To use these requests, you have to set a Postman environment variable named URL with the correct path ot your setup, for example:
+To use these requests, you have to set a Postman environment variable named URL with the correct path of your setup, for example:
 
-http://127.0.0.1:8080/AMT-Webapp-Login-1.0-SNAPSHOT
+http://127.0.0.1:8080/AMT-Webapp-Login-1.0-SNAPSHOT or http://192.168.99.100:8080/AMT-Webapp-Login-1.0-SNAPSHOT
 
 ### JMeter
 
-The **jmeter_test** folder located in the root of our repository contains a JMeter Test Plan
+The **jmeter_test** folder located in the root of our repository contains two jmeter test plans that we used to test the user creation (POST) of our apllication:
+
+* webapp_testplan_POST_create_different_users.jmx
+
+This test plan generates 10 unit groups of 20 users, each of them executes an HTTP POST request to create a new user using a randomly generated UDID as username.
+
+When the test plan is run, each request results in an **HTTP 201 Created** Response
+
+* webapp_testplan_POST_create_same_users.jmx
+
+This test plan generates 10 unit groups of 20 users, each of them executes an HTTP POST request to create a new user using the same username "utilisateur".
+
+When the test plan is run, the first request results in an **HTTP 201 Created** Response. All the following ones result in an **HTTP 409 Conflict** Response.
 
 
 ## Known issues
 
-We have noticed a bug, probably coming from Glassfish, which sometimes provokes an HTTP internal server error on the first execution of every HTTP query, be it from the client browser or from Postman. A refresh in the browser or a re-execution in Postman then produces the expected result.
+We have noticed a bug, probably coming from Glassfish, which sometimes provokes an HTTP internal server error (Code 500) on the first execution of a HTTP query, be it from the client browser or from Postman. A refresh in the browser or a re-execution in Postman then produces the expected result. This issue was reviewed in class with Mr. Liechti, no solution has been found yet.
