@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This EJB provides the logout feature to our web service. After logging out, 
- * the user is redirected to the index page and the id saved on his current 
- * HTTP session is set to null.
+ * This Servlet relies on the UserService EJB to provide the logout feature to
+ * our web service. After logging out,the user is redirected to the index page 
+ * and the id saved on his current HTTP session is set to null.
  * @author Antoine Drabble antoine.drabble@heig-vd.ch
  * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
