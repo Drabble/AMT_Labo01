@@ -171,7 +171,7 @@ The **postman_requests** folder located in the root of our repository contains a
 
 To use these requests, you have to set a Postman environment variable named URL with the correct path of your setup, for example:
 
-http://127.0.0.1:8080/AMT-Webapp-Login-1.0-SNAPSHOT
+http://127.0.0.1:8080/AMT-Webapp-Login-1.0-SNAPSHOT or http://192.168.99.100:8080/AMT-Webapp-Login-1.0-SNAPSHOT
 
 ### JMeter
 
