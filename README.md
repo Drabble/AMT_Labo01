@@ -11,9 +11,6 @@ The deployment of the complete setup is provided by Docker, more specifically, b
 * the mysql database
 * the phpmyadmin 
 
-contains simple web application allowing users to create an account and validate login.
-This application has been developed 
-
 
 
 ## The web application
