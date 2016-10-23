@@ -76,7 +76,8 @@ The response will contain the deletes user's id
 
 The following docker-compose.yml file is used to bring up the whole set up:
 
-```version: '2'
+```
+version: '2'
 services:
   glassfish:
     build: ../images/glassfish
