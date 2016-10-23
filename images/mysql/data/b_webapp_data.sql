@@ -22,7 +22,7 @@ USE webapp_login;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'antoine','1234','antoine.drabble@heig-vd.ch','Antoine','Drabble'),(2,'guillaume','4321','guillaume.serneels@heig-vd.ch','Guillaume','Serneels'),(3,'olivier','1234','olivier.liechti@heig-vd.ch','Olivier','Liechti');
+INSERT INTO `users` VALUES (1,'antoine','1234','antoine.drabble@heig-vd.ch','Antoine','Drabble'),(2,'guillaume','4321','guillaume.serneels@heig-vd.ch','Guillaume','Serneels'),(3,'olivier','1111','olivier.liechti@heig-vd.ch','Olivier','Liechti'),(4,'laurent','2222','laurent.prevost@heig-vd.ch','Laurent','Prevost');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
