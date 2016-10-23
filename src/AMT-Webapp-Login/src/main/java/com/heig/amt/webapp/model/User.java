@@ -7,8 +7,8 @@ package com.heig.amt.webapp.model;
 
 /**
  * This model is used to represent users
- * @author Antoine Drabble
- * @author Guillaume Serneels
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class User {
 

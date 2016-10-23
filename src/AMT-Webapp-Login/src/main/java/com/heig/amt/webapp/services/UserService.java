@@ -19,8 +19,14 @@ import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
 /**
- *
- * @author antoi
+ * This class is the core of the business tier of our application, it represents
+ * the service allowing to manage Users and implements the UserServiceLocal 
+ * inteface. The annotation @Stateless specifies that the class is a Stateless 
+ * session bean EJB and will be instanciated by the application server
+ * The class accesses our MySQL databses using JDBC and implement the CRUD 
+ * operations and the user Login features
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 @Stateless
 public class UserService implements UserServiceLocal {
@@ -31,6 +37,31 @@ public class UserService implements UserServiceLocal {
     @Resource(lookup = "jdbc/webapp_login")
     private DataSource dataSource;
 
+    /**
+     * This method creates a new user record using JDBC, but before doing so it 
+     * verifies that the user input matches the following requirements:
+     * - username should be between 3 and 40 characters long
+     * - password should be between 3 and 50 characters long
+     * - email adress should be between 3 and 40 characters long
+     * - first name and last name should be between 3 and 50 characters long
+     * It also verifies on the database that the chosen username is not yet taken 
+     * 
+     * If all the requirements are met, it executes an INSERT MySQL query to 
+     * register the user.
+     * 
+     * @param username the user's username
+     * @param password the user's password
+     * @param email the user's email adress
+     * @param firstname the user's first name
+     * @param lastname the user's last name
+     * @return the id of the newly registered user
+     * @throws SQLException In case of SQL error
+     * @throws IllegalArgumentException If the provided credentials do not match 
+     * the requirements
+     * @throws RuntimeException If the newly registered user can't be found on
+     * the database
+     * @throws DuplicateKeyException If the username has already been registered
+     */
     @Override
     public long create(String username, String password, String email, String firstname, String lastname) throws SQLException, IllegalArgumentException, RuntimeException, DuplicateKeyException {
         if(username.length() > 40){
@@ -93,7 +124,18 @@ public class UserService implements UserServiceLocal {
             throw new RuntimeException("Internal server error!");
         }
     }
-
+    /**
+     * This method verifies the credentials submited by an user in order to log 
+     * him in the application. It first checks if the username exists and then 
+     * if the correct password has been entered. If it's the case it returns 
+     * the user's id otherwise it throws an IllegalArgumentException
+     * @param username the provided username
+     * @param password the provided password
+     * @return the id of the user who just logged in 
+     * @throws SQLException In case of SQL error
+     * @throws IllegalArgumentException If the provided credentials are not 
+     * correct
+     */
     @Override
     public long login(String username, String password) throws SQLException, IllegalArgumentException {
         connection = dataSource.getConnection();
@@ -104,7 +146,7 @@ public class UserService implements UserServiceLocal {
         if(!rs.next()){
             throw new IllegalArgumentException("User does not exist");
         }
-        
+        // check the password's correctness
         pstmt = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
         pstmt.setString(1, username);
         pstmt.setString(2, password);
@@ -118,6 +160,13 @@ public class UserService implements UserServiceLocal {
         }  
     }
 
+    /**
+     * Returns a specified User
+     * @param id the id of the User to return
+     * @return the User object
+     * @throws SQLException In case of SQL error
+     * @throws IllegalArgumentException If the requested user id doesn't exists
+     */
     @Override
     public User get(long id) throws SQLException, IllegalArgumentException {
         connection = dataSource.getConnection();
@@ -134,7 +183,11 @@ public class UserService implements UserServiceLocal {
         
         throw new IllegalArgumentException("User doesn't exist");
     }
-
+    /**
+     * Returns a List of every registered User
+     * @return the list of User objects
+     * @throws SQLException In case of SQL error
+     */
     @Override
     public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
@@ -150,7 +203,12 @@ public class UserService implements UserServiceLocal {
         }
         return users;
     }
-
+    /**
+     * Deletes a specified User
+     * @param id the id of the User to delete
+     * @return true if the user has been correctly deleted
+     * @throws SQLException In case of SQL error
+     */
     @Override
     public boolean delete(long id) throws SQLException {
         connection = dataSource.getConnection();
@@ -163,7 +221,23 @@ public class UserService implements UserServiceLocal {
 
         return rows > 0;
     }
-
+   
+    /**
+     * This method is used to update an User record on the databse, it firdt
+     * verifies that the user input matches the following requirements:
+     * - username should be between 3 and 40 characters long
+     * - password should be between 3 and 50 characters long
+     * - email adress should be between 3 and 40 characters long
+     * - first name and last name should be between 3 and 50 characters long
+     * It also verifies on the database that the chosen username is not yet taken 
+     * @param id the user's id to update
+     * @param user the new User information to set for the provided user id
+     * @return true if the user has been successfully updated, false otherwise
+     * @throws SQLException In case of SQL error
+     * @throws IllegalArgumentException  If the provided credentials do not match 
+     * the requirements
+     * @throws DuplicateKeyException If the username has already been registered
+     */
     @Override
     public boolean update(long id, User user) throws SQLException, IllegalArgumentException, DuplicateKeyException {
         if(user.getUsername().length() > 40){

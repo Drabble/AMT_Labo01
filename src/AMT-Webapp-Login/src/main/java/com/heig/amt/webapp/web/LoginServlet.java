@@ -17,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author antoi
+ * This EJB provides the login feature to our web service and forwards the 
+ * corresonding view to display client side
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class LoginServlet extends HttpServlet {
 

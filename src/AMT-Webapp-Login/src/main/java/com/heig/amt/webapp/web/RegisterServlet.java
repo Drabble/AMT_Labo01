@@ -17,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author antoi
+ * This Servlet relies on the UserService EJB to provide the user registering
+ * feature to our web service 
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class RegisterServlet extends HttpServlet {
 

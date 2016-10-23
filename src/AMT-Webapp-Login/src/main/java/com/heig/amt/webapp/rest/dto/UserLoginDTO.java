@@ -6,8 +6,11 @@
 package com.heig.amt.webapp.rest.dto;
 
 /**
- *
- * @author antoi
+ * The User Data Transfer Object representing an User used for registering and 
+ * Login, this DTO contains all the attributes of an user (the username, 
+ * the email adress and the first and last names) and also the user's password
+ * @author Antoine Drabble antoine.drabble@heig-vd.ch
+ * @author Guillaume Serneels guillaume.serneels@heig-vd.ch
  */
 public class UserLoginDTO {
 
