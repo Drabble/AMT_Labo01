@@ -18,7 +18,7 @@ This application has been developed
 
 ## The web application
 
-The **src** folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses EJB for the services. The database is stored inside a singleton EJB.
+The **src** folder contains the AMT-Webapp-Login source code MVC java EE app with login/register and permissions. It also implements a JAX-RS REST API for CRUD operations on the users. It uses a Stateles Session Bean EJB for the main user service and to interact with the mysql database. 
 
 
 ## REST API Documentation
