@@ -73,7 +73,9 @@ The response will contain the deletes user's id
 ## Deployment
 
 ### Docker compose
+
 The following docker-compose.yml file is used to bring up the whole set up:
+
 ```version: '2'
 services:
   glassfish:
@@ -98,6 +100,7 @@ services:
     links:
       - mysql:db
 ```
+
 It instantiates these three docker images:
 
  * The glassfish application server
@@ -142,6 +145,6 @@ http://127.0.0.1:8080/AMT-Webapp-Login-1.0-SNAPSHOT
 The **jmeter_test** folder located in the root of our repository contains a JMeter Test Plan
 
 
-##Known issues
+## Known issues
 
 We have noticed a bug, probably coming from Glassfish, which provokes an HTTP internal server error on the first execution of every HTTP query, be it from the client browser or from Postman. A refresh in the browser or a re-execution in Postman then produces the expected result.
