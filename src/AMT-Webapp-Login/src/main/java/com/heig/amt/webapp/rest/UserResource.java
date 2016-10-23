@@ -30,6 +30,7 @@ import javax.ws.rs.core.UriInfo;
 import com.heig.amt.webapp.rest.dto.UserDTO;
 import com.heig.amt.webapp.rest.dto.UserLoginDTO;
 import com.heig.amt.webapp.rest.dto.ErrorDTO;
+import com.heig.amt.webapp.rest.dto.UserIdDTO;
 import javax.ejb.DuplicateKeyException;
 
 /**
@@ -85,8 +86,8 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addUser(UserLoginDTO user) {
         try {
-            userService.create(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstname(), user.getLastname());
-            return Response.status(Response.Status.CREATED).build();
+            long id = userService.create(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstname(), user.getLastname());
+            return Response.status(Response.Status.CREATED).entity(new UserIdDTO(id)).build();
         }  catch(DuplicateKeyException e){
             return Response.status(Response.Status.CONFLICT).entity(new ErrorDTO(e.getMessage())).build();
         }catch (Exception e) {
@@ -104,49 +105,46 @@ public class UserResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public Response updateUser(@PathParam("userId") long userId, UserLoginDTO user) {
         try {
             if (userService.update(userId, UserLoginDTOToUser(user))) {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity(new UserIdDTO(userId)).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO("User not found!")).build();
             }
+        } catch(DuplicateKeyException e){
+            return Response.status(Response.Status.CONFLICT).entity(new ErrorDTO(e.getMessage())).build();
         } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
             // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
+            if(e.getCause() != null && e.getCause().getCause().getClass().getSimpleName().equals(IllegalArgumentException.class.getSimpleName())){
+                return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDTO(e.getCause().getCause().getMessage())).build();
             }
             // Otherwise send internal server error message
             else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDTO("Internal server error!")).build();
             }
         }
     }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public Response deleteUser(@PathParam("userId") long userId) {
         try {
             if (userService.delete(userId)) {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity(new UserIdDTO(userId)).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO("User not found!")).build();
             }
         } catch (Exception e) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, e.getMessage(), e);
 
-            // If we throwed an illegal argument exception retrieve message
-            if (e.getCause() != null && e.getCause().getClass().getSimpleName().equals("IllegalArgumentException")) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
-            }
-            // Otherwise send internal server error message
-            else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
